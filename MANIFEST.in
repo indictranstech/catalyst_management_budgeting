@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include catalyst_management *.css
+recursive-include catalyst_management *.csv
+recursive-include catalyst_management *.html
+recursive-include catalyst_management *.ico
+recursive-include catalyst_management *.js
+recursive-include catalyst_management *.json
+recursive-include catalyst_management *.md
+recursive-include catalyst_management *.png
+recursive-include catalyst_management *.py
+recursive-include catalyst_management *.svg
+recursive-include catalyst_management *.txt
+recursive-exclude catalyst_management *.pyc
