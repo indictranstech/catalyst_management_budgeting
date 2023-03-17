@@ -30,6 +30,13 @@ app_license = "MIT"
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+        "Sales Invoice" : "custom_script/sales_invoice/sales_invoice.js",
+        "Purchase Invoice" : "custom_script/purchase_invoice/purchase_invoice.js",
+        "Expense Claim": "custom_script/expense_claim/expense_claim.js",
+        "Payroll Entry" : "custom_script/payroll_entry/payroll_entry.js",
+        "Journal Entry" : "custom_script/journal_entry/journal_entry.js"
+	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -199,3 +206,7 @@ app_license = "MIT"
 # auth_hooks = [
 #	"catalyst_management.auth.validate"
 # ]
+
+fixtures = [
+    'Custom Field'
+]
