@@ -61,7 +61,7 @@ def get_data(filters):
 			}
 		)
 
-	# Filters is a dictionary of filters, so we can just filter the data straight away
+	# Filters is a dictionary of filters, so we can just filter the data straight away based on the filters dict
 	filtered_data = [d for d in data if all(item in d.items() for item in filters.items())]
 	return filtered_data
 
@@ -92,4 +92,3 @@ def make_data():
 			data_.append(i)
 
 	return data_
-	

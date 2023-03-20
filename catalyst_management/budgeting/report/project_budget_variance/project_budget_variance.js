@@ -36,11 +36,5 @@ frappe.query_reports["Project Budget Variance"] = {
 			console.log(report)
 			frappe.set_route('query-report', 'Project Amounts Breakdown', {company: filters.project});
 		});
-
-		report.report_doc.add_total_row = 1
-	},
-
-	project: function(report){
-		console.log(report)
 	}
 };
