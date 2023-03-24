@@ -100,8 +100,6 @@ def get_data(filters):
 
 		# Add to Data
 		data.append(d)
-
-	print("\n\n\n DATA\n", data, "\n\n")
 	
 	return data
 
@@ -117,12 +115,19 @@ def actual_amounts(project, head, start_date, end_date):
 	je_total = 0
 	pi_amount = frappe.get_all('Purchase Invoice Item', filters={
 		"project_for_budget": project,
-		"budget_account_head": head
+		"budget_account_head": head,
+		"docstatus": 1
 	}, fields=["project_for_budget", "budget_account_head", "amount", "modified"])
 	ec_amount = frappe.get_all('Expense Claim Detail', filters={
 		"project_for_budget": project,
-		"budget_account_head": head
+		"budget_account_head": head,
+		"docstatus": 1
 	}, fields=["project_for_budget", "budget_account_head", "amount", "modified"])
+	je_amount = frappe.get_all('Journal Entry Account', filters={
+		"project_for_budget": project,
+		"budget_account_head": head,
+		"docstatus": 1
+	}, fields=["project_for_budget", "budget_account_head", "debit_in_account_currency", "modified"])
 
 	for i in pi_amount:
 		if start_date < (i.modified).date() < end_date:
@@ -132,29 +137,11 @@ def actual_amounts(project, head, start_date, end_date):
 		if start_date < (i.modified).date() < end_date:
 			ec_total = ec_total + i.amount
 
-	return pi_total + ec_total + je_total_amount(project, head, start_date, end_date)
+	for i in je_amount:
+		if start_date < (i.modified).date() < end_date:
+			if i.debit_in_account_currency:
+				i["amount"] = i["debit_in_account_currency"]
+				je_total = je_total + i.amount
 
-def je_total_amount(project, head, start_date, end_date):
-	je_total = 0
-	journal_entries = frappe.get_all("Journal Entry", pluck='name')
-	for entry in journal_entries:
-		amount = journal_entry_amount(entry, project, head, start_date, end_date)
-		try:
-			je_total = je_total + amount
-		except Exception as e:
-			pass
-	return je_total
+	return pi_total + ec_total + je_total
 
-def journal_entry_amount(je, project, head, start_date, end_date):
-	doc = frappe.get_doc("Journal Entry", je)
-	for entry in doc.accounts:
-		'''
-			Entry has the same project as report record
-			Entry has same acconting head
-			Entry falls under accountig period
-		'''
-		if entry.debit_in_account_currency > 0 \
-		 and entry.project_for_budget == project \
-		  and entry.budget_account_head == head \
-		  and (start_date < doc.posting_date < end_date):
-			return entry.debit_in_account_currency

@@ -61,6 +61,7 @@ def get_data(filters):
 			}
 		)
 
+	print('\n\n DATA....\n', data, '\n\n\n')
 	# Filters is a dictionary of filters, so we can just filter the data straight away based on the filters dict
 	filtered_data = [d for d in data if all(item in d.items() for item in filters.items())]
 	return filtered_data
@@ -73,22 +74,22 @@ def make_data():
 	'''
 	data_ = []
 
-	pi_docs = frappe.get_all('Purchase Invoice Item', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype"])
-	ec_docs = frappe.get_all('Expense Claim Detail', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype"])
-	je_docs = frappe.get_all('Journal Entry Account', fields=["project_for_budget", "project_budget", "budget_account_head", "debit_in_account_currency", "modified", "parent", "parenttype"])
+	pi_docs = frappe.get_all('Purchase Invoice Item', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype", "docstatus"])
+	ec_docs = frappe.get_all('Expense Claim Detail', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype", "docstatus"])
+	je_docs = frappe.get_all('Journal Entry Account', fields=["project_for_budget", "project_budget", "budget_account_head", "debit_in_account_currency", "modified", "parent", "parenttype", "docstatus"])
 
 	for i in pi_docs:
-		# if start_date < (i.modified).date() < end_date:
-		data_.append(i)
-
-	for i in ec_docs:
-		# if start_date < (i.modified).date() < end_date:
-		data_.append(i)
-
-	for i in je_docs:
-		if i.debit_in_account_currency:
-			i["amount"] = i["debit_in_account_currency"]
-		# if start_date < (i.modified).date() < end_date:
+		if i.project_for_budget and i.docstatus == 1:
 			data_.append(i)
 
+	for i in ec_docs:
+		if i.project_for_budget and i.docstatus == 1:
+			data_.append(i)
+
+	for i in je_docs:
+		if i.debit_in_account_currency and i.project_for_budget and i.docstatus == 1:
+			i["amount"] = i["debit_in_account_currency"]
+			data_.append(i)
+
+	print('\n\n DATA____\n', data_, '\n\n\n')
 	return data_
