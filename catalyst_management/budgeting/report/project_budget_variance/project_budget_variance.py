@@ -67,6 +67,7 @@ def get_data(filters):
 	if filters.get("period"): conditions.append(["period", "=", filters.get("period")])
 	if filters.get("project"): conditions.append(["parent", "=", filters.get("project")])
 	if filters.get("budget_account_head"): conditions.append(["budget_account_head", "=", filters.get("budget_account_head")])
+	conditions.append({"docstatus": 1})
 
 		# Data
 	''' 
@@ -75,7 +76,7 @@ def get_data(filters):
 	budget_account_map = frappe.db.get_all('Budget Account Mapping', [
 		"period",
 		"budget_account_head",
-		"gl_ledger",
+		"monthly_distribution",
 		"amount",
 		"parent" # => Project Budget == project name as well
 	], filters=conditions)

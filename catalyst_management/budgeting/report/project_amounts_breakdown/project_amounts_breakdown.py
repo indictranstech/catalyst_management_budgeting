@@ -77,6 +77,7 @@ def make_data():
 	pi_docs = frappe.get_all('Purchase Invoice Item', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype", "docstatus"])
 	ec_docs = frappe.get_all('Expense Claim Detail', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype", "docstatus"])
 	je_docs = frappe.get_all('Journal Entry Account', fields=["project_for_budget", "project_budget", "budget_account_head", "debit_in_account_currency", "modified", "parent", "parenttype", "docstatus"])
+	
 
 	for i in pi_docs:
 		if i.project_for_budget and i.docstatus == 1:

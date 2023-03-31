@@ -2,13 +2,13 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Project Amounts Breakdown"] = {
+frappe.query_reports["Project Monthly Budget"] = {
 	"filters": [
 		{
-			"fieldname": "document",
-			"label": __("Doctype"),
-			"fieldtype": "Select",
-			"options": ["", "Journal Entry", "Purchase Invoice", "Expense Claim"],
+			"fieldname": "period",
+			"label": __("Accounting Period"),
+			"fieldtype": "Link",
+			"options": "Accounting Period",
 			"width": 100,
 			"reqd": 0,
 		},
@@ -27,15 +27,23 @@ frappe.query_reports["Project Amounts Breakdown"] = {
 			"options": "Budget Account Head",
 			"width": 100,
 			"reqd": 0,
+		},
+		{
+			"fieldname": "budget_month",
+			"label": __("Budget Month"),
+			"fieldtype": "Select",
+			"options": ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			"width": 100,
+			"reqd": 0,
 		}
 	],
 
 	onload: function(report) {
-		report.page.add_inner_button(__("Project Budget Breakdown"), function() {
-			frappe.set_route('query-report', 'Project Budget Breakdown');
+		report.page.add_inner_button(__("Project Amounts Breakdown"), function() {
+			frappe.set_route('query-report', 'Project Amounts Breakdown');
 		});
 		report.page.add_inner_button(__("Project Budget Variance"), function() {
 			frappe.set_route('query-report', 'Project Budget Variance');
 		});
-	},
+	}
 };
