@@ -208,5 +208,5 @@ doctype_js = {
 # ]
 
 fixtures = [
-    'Custom Field', 'Print Format'
+    'Custom Field'
 ]
