@@ -35,7 +35,9 @@ doctype_js = {
         "Purchase Invoice" : "custom_script/purchase_invoice/purchase_invoice.js",
         "Expense Claim": "custom_script/expense_claim/expense_claim.js",
         "Payroll Entry" : "custom_script/payroll_entry/payroll_entry.js",
-        "Journal Entry" : "custom_script/journal_entry/journal_entry.js"
+        "Journal Entry" : "custom_script/journal_entry/journal_entry.js",
+        "Payment Entry" : "public/js/payment_entry_custom.js",
+
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -208,5 +210,25 @@ doctype_js = {
 # ]
 
 fixtures = [
-    'Custom Field'
+    'Custom Field',
+    {
+		"dt": "Translation", "filters": [
+			[
+				"name", "in", [
+					"d0874f47be",
+				]
+			]
+		]
+	},
+    {
+		"dt": "Property Setter", "filters": [
+			[
+				"name", "in", [
+					"Expense Claim-expense_approver-read_only",
+                    "Expense Claim-expense_approver-fetch_from",
+				]
+			]
+		]
+	},
+
 ]
