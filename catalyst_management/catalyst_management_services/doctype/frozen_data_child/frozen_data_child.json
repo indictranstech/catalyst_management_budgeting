@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-04-20 15:20:07.626023",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "doctypes",
+  "freeze_date",
+  "grace_days",
+  "valid_till",
+  "role"
+ ],
+ "fields": [
+  {
+   "fieldname": "doctypes",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Doctypes",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "freeze_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Freeze Date ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "grace_days",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Grace Days",
+   "reqd": 1
+  },
+  {
+   "fieldname": "valid_till",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Valid Till",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "role",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Role",
+   "options": "Role",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-04-20 18:10:32.285313",
+ "modified_by": "Administrator",
+ "module": "Catalyst Management Services",
+ "name": "Frozen data child",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

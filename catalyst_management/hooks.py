@@ -37,6 +37,8 @@ doctype_js = {
         "Payroll Entry" : "custom_script/payroll_entry/payroll_entry.js",
         "Journal Entry" : "custom_script/journal_entry/journal_entry.js",
         "Payment Entry" : "public/js/payment_entry_custom.js",
+        "Purchase Order" : "public/js/purchase_order.js",
+        "Employee Advance" : "public/js/employee_advance.js",
 
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
