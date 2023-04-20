@@ -7,7 +7,7 @@ frappe.ui.form.on('Frozen Data', {
 		frm.set_query('doctypes', 'frozen_data_child', () => {
 			return {
 				filters: {
-					name:['in',  ['Sales Invoice','Purchase Invoice','Journal Entry','Purchase Order','Receipt / Tranfer entry','Payment Entry'] ]
+					name:['in',  ['Sales Invoice','Purchase Invoice','Journal Entry','Purchase Order','Receipt / Tranfer entry','Payment Entry','Employee Advance','Expense Claim'] ]
 				}
 			}
 		})
@@ -18,7 +18,7 @@ frappe.ui.form.on('Frozen Data', {
 		frm.set_query('doctypes', 'frozen_data_child', () => {
 			return {
 				filters: {
-					name: ['Sales Invoice','Purchase Invoice','Journal Entry','Purchase Order','Receipt / Tranfer entry','Payment Entry']
+					name:['in',  ['Sales Invoice','Purchase Invoice','Journal Entry','Purchase Order','Receipt / Tranfer entry','Payment Entry','Employee Advance','Expense Claim'] ]
 				}
 			}
 		})
