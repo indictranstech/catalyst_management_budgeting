@@ -226,6 +226,8 @@ fixtures = [
 				"name", "in", [
 					"Expense Claim-expense_approver-read_only",
                     "Expense Claim-expense_approver-fetch_from",
+                    "Payment Entry-reference_no-depends_on",
+                    "Payment Entry-reference_date-allow_on_submit",
 				]
 			]
 		]
