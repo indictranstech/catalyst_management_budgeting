@@ -150,10 +150,10 @@ doctype_js = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-#	"frappe.desk.doctype.event.event.get_events": "catalyst_management.event.get_events"
-# }
-#
+override_whitelisted_methods = {
+	"hrms.overrides.employee_payment_entry.get_payment_entry_for_employee": "catalyst_management.custom_script.overrides.employee_payment_entry.get_payment_entry_for_employee"
+}
+
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
 # along with any modifications made in other Frappe apps
