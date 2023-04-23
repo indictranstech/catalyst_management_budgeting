@@ -36,7 +36,12 @@ def get_columns():
 		{
 			"fieldname": "monthly_budget_amount",
 			"fieldtype": "Currency",
-			"label": "Monthly Budget Amount",
+			"label": "Monthly Budget Amount By Percentage",
+		},
+		{
+			"fieldname": "monthly_amount_allocation",
+			"fieldtype": "Currency",
+			"label": "Monthly Budget Amount By Amount",
 		},
         {
             'fieldname': 'amount',
@@ -78,6 +83,7 @@ def get_data(filters):
 		for m in monthly_distribution_percentages(d["monthly_distribution"]):
 			if m.month == d["budget_month"]:
 				d["monthly_budget_amount"] = ((m.percentage_allocation / 100) * total_budget(d["project"], budget_account_map))
+				d["monthly_amount_allocation"] = m.amount__allocation
 
 		# Add to Data
 		data.append(d)
@@ -94,6 +100,6 @@ def total_budget(project, budget_account_map):
 def monthly_distribution_percentages(dist):
 	distributions = frappe.get_all("Monthly Distribution Percentage", 
 		filters={"parent": dist},
-		fields=["month", "percentage_allocation", "parent"])
+		fields=["month", "percentage_allocation", "amount__allocation", "parent"])
 	return distributions
 
