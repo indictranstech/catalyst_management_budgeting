@@ -117,6 +117,9 @@ doctype_js = {
 doc_events = {
 	"Project": {
 		"before_insert": "catalyst_management.custom_script.project.project_custom.date_log",
+	},
+    "Sales Invoice":{
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
 	}
 }
 
