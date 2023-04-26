@@ -39,6 +39,7 @@ doctype_js = {
         "Payment Entry" : "public/js/payment_entry_custom.js",
         "Purchase Order" : "public/js/purchase_order.js",
         "Employee Advance" : "public/js/employee_advance.js",
+        "Project" : "public/js/project.js",
 
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
@@ -113,13 +114,11 @@ doctype_js = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-#	"*": {
-#		"on_update": "method",
-#		"on_cancel": "method",
-#		"on_trash": "method"
-#	}
-# }
+doc_events = {
+	"Project": {
+		"before_insert": "catalyst_management.custom_script.project.project_custom.date_log",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
