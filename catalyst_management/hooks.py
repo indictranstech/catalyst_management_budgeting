@@ -228,9 +228,14 @@ fixtures = [
 		"dt": "Property Setter", "filters": [
 			[
 				"name", "in", [
+                    # Expense Claim
 					"Expense Claim-expense_approver-read_only",
                     "Expense Claim-expense_approver-fetch_from",
-                    "Payment Entry-reference_no-depends_on",
+                    "Expense Claim-approval_status-read_only",
+                    "Expense Claim-approval_status-default",
+                    
+                    # Payment Entry
+					"Payment Entry-reference_no-depends_on",
                     "Payment Entry-reference_date-allow_on_submit",
 				]
 			]
