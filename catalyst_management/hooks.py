@@ -120,7 +120,16 @@ doc_events = {
 	},
     "Sales Invoice":{
 		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
-	}
+	},
+    "Sales Order":{
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
+	},
+    "Purchase Order":{
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
+	},
+    "Purchase Invoice":{
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
+	},
 }
 
 # Scheduled Tasks

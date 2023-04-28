@@ -2,7 +2,6 @@ import frappe
 import json
 
 def tax_item_break(doc,method):
-    frappe.msgprint('tax_item_break')
     mya = []
     for i in doc.items:
         my_dict ={}
