@@ -119,16 +119,16 @@ doc_events = {
 		"before_insert": "catalyst_management.custom_script.project.project_custom.date_log",
 	},
     "Sales Invoice":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
 	},
     "Sales Order":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
 	},
     "Purchase Order":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
 	},
     "Purchase Invoice":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break"
+		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
 	},
 }
 
