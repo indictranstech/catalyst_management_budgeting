@@ -4,6 +4,7 @@ frappe.ui.form.on('Project', {
 		// your code here
         let row = frm.add_child('project_date_log', {
                 'expected_start_date':cur_frm.doc.expected_start_date,
+                "expected_end_date":cur_frm.doc.expected_end_date,
                 "on":frappe.datetime.get_today()
             
         })
@@ -12,6 +13,7 @@ frappe.ui.form.on('Project', {
 	expected_end_date(frm) {
 		// your code here
         let row = frm.add_child('project_date_log', {
+                'expected_start_date':cur_frm.doc.expected_start_date,
                 "expected_end_date":cur_frm.doc.expected_end_date,
                 "on":frappe.datetime.get_today()
             

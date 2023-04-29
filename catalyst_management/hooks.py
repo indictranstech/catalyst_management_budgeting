@@ -37,10 +37,7 @@ doctype_js = {
         "Payroll Entry" : "custom_script/payroll_entry/payroll_entry.js",
         "Journal Entry" : "custom_script/journal_entry/journal_entry.js",
         "Payment Entry" : "public/js/payment_entry_custom.js",
-        "Purchase Order" : "public/js/purchase_order.js",
-        "Employee Advance" : "public/js/employee_advance.js",
         "Project" : "public/js/project.js",
-
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -118,21 +115,41 @@ doc_events = {
 	"Project": {
 		"before_insert": "catalyst_management.custom_script.project.project_custom.date_log",
 	},
-    "Sales Invoice":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
+    "Sales Invoice":{   #for tax_item_break table
+		"before_save":["catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break",#for tax_item_break table
+                 	   "catalyst_management.custom_script.utils.frozen_validate_posting_date",
+					  ]
 	},
-    "Sales Order":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
+    "Sales Order":{    #for tax_item_break table
+		"before_save":["catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break",#for tax_item_break table
+                 	  "catalyst_management.custom_script.utils.frozen_validate_transaction_date",
+                      ]
 	},
     "Purchase Order":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
+		"before_save":["catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break",#for tax_item_break table
+                 	  "catalyst_management.custom_script.utils.frozen_validate_transaction_date",
+                      ]
 	},
     "Purchase Invoice":{
-		"before_save":"catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break" #for tax_item_break table
+		"before_save":["catalyst_management.custom_script.sales_invoice.sales_invoice_custom.tax_item_break",#for tax_item_break table
+                 	   "catalyst_management.custom_script.utils.frozen_validate_posting_date",
+                      ]
+	},
+	"Employee Advance": {
+		"before_save": "catalyst_management.custom_script.utils.frozen_validate_posting_date",
+	},
+	"Payment Entry": {
+		"before_save": "catalyst_management.custom_script.utils.frozen_validate_posting_date",
+	},
+	"Expense Claim": {
+		"before_save": "catalyst_management.custom_script.utils.frozen_validate_posting_date",
+	},
+	"Journal Entry": {
+		"before_save": "catalyst_management.custom_script.utils.frozen_validate_posting_date",
 	},
 }
 
-# Scheduled Tasks
+# Scheduled Tasks 
 # ---------------
 
 # scheduler_events = {
