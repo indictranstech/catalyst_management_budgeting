@@ -263,6 +263,8 @@ fixtures = [
                     # Payment Entry
 					"Payment Entry-reference_no-depends_on",
                     "Payment Entry-reference_date-allow_on_submit",
+                    "Payment Entry-payment_type-label",
+                    "Payment Entry-type_of_payment-label",
 				]
 			]
 		]
