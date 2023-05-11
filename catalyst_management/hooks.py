@@ -269,5 +269,99 @@ fixtures = [
 			]
 		]
 	},
+     {
+		"dt": "Journal Entry", "filters": [
+			[
+				"name", "in", [
+					"Journal Entry-territory_details",
+                    "Journal Entry-territory"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Purchase Invoice", "filters": [
+			[
+				"name", "in", [
+					"Purchase Invoice-territory_details",
+                    "Purchase Invoice-territory"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Payroll Employee Detail", "filters": [
+			[
+				"name", "in", [
+					"Payroll Employee Detail-project_budgeting",
+                    "Payroll Employee Detail-project_for_budget",
+                    "Payroll Employee Detail-project_budget",
+                    "Payroll Employee Detail-column_break_irse9",
+                    "Payroll Employee Detail-budget_account_head"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Journal Entry Account", "filters": [
+			[
+				"name", "in", [
+					"Journal Entry Account-project_budgeting",
+                    "Journal Entry Account-project_for_budget",
+                    "Journal Entry Account-project_budget",
+                    "Journal Entry Account-column_break_rhnkg",
+                    "Journal Entry Account-budget_account_head"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Expense Claim Detail", "filters": [
+			[
+				"name", "in", [
+					"Expense Claim Detail-project_budgeting",
+                    "Expense Claim Detail-project_for_budget",
+                    "Expense Claim Detail-project_budget",
+                    "Expense Claim Detail-column_break_zgdqc",
+                    "Expense Claim Detail-budget_account_head"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Purchase Invoice Item", "filters": [
+			[
+				"name", "in", [
+					"Purchase Invoice Item-project_budgeting",
+                    "Purchase Invoice Item-project_for_budget",
+                    "Purchase Invoice Item-project_budget",
+                    "Purchase Invoice Item-column_break_aipxo",
+                    "Purchase Invoice Item-budget_account_head"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Sales Invoice Item", "filters": [
+			[
+				"name", "in", [
+					"Sales Invoice Item-project_budgeting",
+                    "Sales Invoice Item-project_for_budget",
+                    "Sales Invoice Item-project_budget",
+                    "Sales Invoice Item-column_break_mnjj5",
+                    "Sales Invoice Item-budget_account_head"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Monthly Distribution Percentage", "filters": [
+			[
+				"name", "in", [
+					"Monthly Distribution Percentage-amount_allocation",
+				]
+			]
+		]
+	},
 
 ]
