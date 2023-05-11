@@ -355,6 +355,36 @@ fixtures = [
 		]
 	},
     {
+		"dt": "Donor", "filters": [
+			[
+				"name", "in", [
+					"Donor-pan_number",
+                    "Donor-aadhar_number",
+                    "Donor-project_budgeting",
+                    "Donor-project_for_budget",
+                    "Donor-project_budget",
+                    "Donor-column_break_ilgv0",
+                    "Donor-budget_account_head"
+				]
+			]
+		]
+	},
+    {
+		"dt": "Donation", "filters": [
+			[
+				"name", "in", [
+					"Donation-pan_number",
+                    "Donation-aadhar_number",
+                    "Donation-project_budgeting",
+                    "Donation-project_for_budget",
+                    "Donation-project_budget",
+                    "Donation-column_break_kgqf5",
+                    "Donation-budget_account_head"
+				]
+			]
+		]
+	},
+    {
 		"dt": "Monthly Distribution Percentage", "filters": [
 			[
 				"name", "in", [
