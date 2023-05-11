@@ -5,3 +5,5 @@
 tags
 catalyst_management/docs/current
 node_modules/
+catalyst_management/templates/pages/__pycache__
+catalyst_management/www/__pycache__
