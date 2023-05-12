@@ -27,6 +27,64 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 			}
 		},
 		{
+			"fieldname": "all_cost_center_child",
+			"label": __("All Cost Center Child"),
+			"fieldtype": "Button",
+			onclick: function() {
+	
+				frappe.query_report.set_filter_value('cost_center', [])
+				var new_filter1_value = []
+				frappe.call({
+					method: 'frappe.client.get_list',
+					args: {
+						'doctype': 'Cost Center',
+						'filters':{'is_group':0},
+						'fields': ['name']
+					},
+					async: false,
+					callback: function(r) {
+						if (!r.exc) {
+							if (r.message) {
+								new_filter1_value = r.message.map(obj => obj.name)
+								console.log(new_filter1_value)
+								frappe.query_report.set_filter_value('cost_center', new_filter1_value)
+							}
+						}
+					}
+				})
+	
+			}
+		}, 
+		{
+			"fieldname": "all_cost_center_parent",
+			"label": __("All Cost Center parent"),
+			"fieldtype": "Button",
+			onclick: function() {
+	
+				frappe.query_report.set_filter_value('cost_center', [])
+				var new_filter1_value = []
+				frappe.call({
+					method: 'frappe.client.get_list',
+					args: {
+						'doctype': 'Cost Center',
+						'filters':{'is_group':1},
+						'fields': ['name']
+					},
+					async: false,
+					callback: function(r) {
+						if (!r.exc) {
+							if (r.message) {
+								new_filter1_value = r.message.map(obj => obj.name)
+								console.log(new_filter1_value)
+								frappe.query_report.set_filter_value('cost_center', new_filter1_value)
+							}
+						}
+					}
+				})
+	
+			}
+		}, 
+		{
 			"fieldname": "include_default_book_entries",
 			"label": __("Include Default Book Entries"),
 			"fieldtype": "Check",
