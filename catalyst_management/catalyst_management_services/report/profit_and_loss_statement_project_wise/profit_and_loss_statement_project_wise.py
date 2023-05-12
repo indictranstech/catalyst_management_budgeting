@@ -69,7 +69,7 @@ def execute(filters=None):
 			dd.project = [j]
 			dd.crrr = 0
 			pro_fl= frappe.desk.query_report.run("Profit and Loss Statement",dd)
-			print(pro_fl)
+			# print(pro_fl)
 			
 			for k in pro_fl['result']:
 				try:
@@ -77,6 +77,8 @@ def execute(filters=None):
 					if index:
 						data[index][str(j.replace('',"_"))] = k[str(key)]
 				except KeyError:
+					pass
+				except IndexError:
 					pass
 
 

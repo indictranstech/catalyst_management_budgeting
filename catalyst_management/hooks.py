@@ -36,7 +36,7 @@ doctype_js = {
         "Expense Claim": "custom_script/expense_claim/expense_claim.js",
         "Payroll Entry" : "custom_script/payroll_entry/payroll_entry.js",
         "Journal Entry" : "custom_script/journal_entry/journal_entry.js",
-        "Payment Entry" : "public/js/payment_entry_custom.js",
+        "Payment Entry" : "publ ic/js/payment_entry_custom.js",
         "Project" : "public/js/project.js",
 	}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:site_name",
  "creation": "2023-05-09 12:43:15.287273",
@@ -26,7 +27,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-05-09 12:46:33.943915",
+ "modified": "2023-05-09 13:19:00.005737",
  "modified_by": "Administrator",
  "module": "Catalyst Management Services",
  "name": "site name",
