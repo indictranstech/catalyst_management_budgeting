@@ -39,7 +39,8 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 					args: {
 						'doctype': 'Cost Center',
 						'filters':{'is_group':0},
-						'fields': ['name']
+						'fields': ['name'],
+						"limit_page_length":500,
 					},
 					async: false,
 					callback: function(r) {
@@ -68,7 +69,9 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 					args: {
 						'doctype': 'Cost Center',
 						'filters':{'is_group':1},
-						'fields': ['name']
+						'fields': ['name'],
+						"limit_page_length":500,
+
 					},
 					async: false,
 					callback: function(r) {
