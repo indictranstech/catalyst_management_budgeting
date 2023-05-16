@@ -40,7 +40,7 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 						'doctype': 'Cost Center',
 						'filters':{'is_group':0},
 						'fields': ['name'],
-						"limit_page_length":500,
+						"limit_page_length":10000,
 					},
 					async: false,
 					callback: function(r) {

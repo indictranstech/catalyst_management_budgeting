@@ -36,7 +36,7 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 				args: {
 					'doctype': 'Project',
 					'fields': ['name'],
-					"limit_page_length":500,
+					"limit_page_length":10000,
 				},
 				async: false,
 				callback: function(r) {

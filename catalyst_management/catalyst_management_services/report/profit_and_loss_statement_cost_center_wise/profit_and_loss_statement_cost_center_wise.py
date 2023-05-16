@@ -79,19 +79,18 @@ def execute(filters=None):
 			dd = filters.copy()
 			dd.cost_center = [j]
 			dd.crrr = 0
-			pro_fl= frappe.desk.query_report.run("Profit and Loss Statement",dd)
+			pro_fl= frappe.desk.query_report.run("Profit and Loss Statement Cost Center Wise",dd)
 
-			if 'result' in pro_fl:
-				for k in pro_fl['result']:
-					try:
-						index = [i for i, d in enumerate(data) if d.get('account') == k['account']][0]
-						if index:
-							data[index][str(j.replace('',"_"))] = k[str(key)]
-					except KeyError:
-						pass
-					except IndexError:
-						pass
-
+			# if 'result' in pro_fl:
+			for k in pro_fl['result']:
+				try:
+					index = [i for i, d in enumerate(data) if d.get('account') == k['account']][0]
+					if index:
+						data[index][str(j.replace('',"_"))] = k[str(key)]
+				except KeyError:
+					pass
+				except IndexError:
+					pass
 
 	columns = get_columns(
 		filters.periodicity, period_list, filters.accumulated_values, filters.company
