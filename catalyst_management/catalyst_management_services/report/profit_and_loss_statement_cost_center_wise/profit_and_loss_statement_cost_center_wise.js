@@ -38,7 +38,7 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 					method: 'frappe.client.get_list',
 					args: {
 						'doctype': 'Cost Center',
-						'filters':{'is_group':0},
+						'filters':{'is_group':0,'company':frappe.query_report.get_filter_value('company')},
 						'fields': ['name'],
 						"limit_page_length":10000,
 					},
@@ -68,7 +68,7 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 					method: 'frappe.client.get_list',
 					args: {
 						'doctype': 'Cost Center',
-						'filters':{'is_group':1},
+						'filters':{'is_group':1,'company':frappe.query_report.get_filter_value('company')},
 						'fields': ['name'],
 						"limit_page_length":500,
 

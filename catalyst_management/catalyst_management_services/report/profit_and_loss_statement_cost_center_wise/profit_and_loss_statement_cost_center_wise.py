@@ -74,6 +74,8 @@ def execute(filters=None):
 	if period_list[0]['key']:
 		key = period_list[0]['key']
 
+
+
 	for j in  filters.get("cost_center"):
 		if filters.get("crrr") == 1:
 			dd = filters.copy()
@@ -81,10 +83,11 @@ def execute(filters=None):
 			dd.crrr = 0
 			pro_fl= frappe.desk.query_report.run("Profit and Loss Statement Cost Center Wise",dd)
 
-			# if 'result' in pro_fl:
 			for k in pro_fl['result']:
 				try:
-					index = [i for i, d in enumerate(data) if d.get('account') == k['account']][0]
+					# index = [i for i, d in enumerate(data) if d.get('account') == k['account']][0]
+					dict_comp = {item.get('account'): index for index, item in enumerate(data)}
+					index=dict_comp.get(k['account'])
 					if index:
 						data[index][str(j.replace('',"_"))] = k[str(key)]
 				except KeyError:
