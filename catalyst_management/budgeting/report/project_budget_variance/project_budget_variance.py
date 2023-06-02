@@ -97,7 +97,12 @@ def get_data(filters):
 		d["variance"] = d["amount"] - d["actual_amount"]
 
 		# Variance (%)
-		d["variance_percentage"] = (d["variance"] / d["amount"]) * 100
+			# strt fixing ZeroDivisionError 
+		if (d["variance"] != None and d["variance"]  !=0) and (d["amount"] != None and d["amount"]  !=0):
+			d["variance_percentage"] = round((d["variance"] / d["amount"]) * 100,2)
+		else:
+			d["variance_percentage"] = 0
+			# end fixing ZeroDivisionError 
 
 		# Add to Data
 		data.append(d)
