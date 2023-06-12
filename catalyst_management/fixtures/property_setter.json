@@ -1,0 +1,18 @@
+[
+ {
+  "default_value": null,
+  "doc_type": "Expense Claim Detail",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "sanctioned_amount",
+  "is_system_generated": 0,
+  "modified": "2023-06-09 15:59:48.663335",
+  "module": null,
+  "name": "Expense Claim Detail-sanctioned_amount-reqd",
+  "property": "reqd",
+  "property_type": "Check",
+  "row_name": null,
+  "value": "1"
+ }
+]

@@ -208,5 +208,14 @@ doctype_js = {
 # ]
 
 fixtures = [
-    'Custom Field'
+    'Custom Field',
+    {
+		"dt": "Property Setter", "filters": [
+			[
+				"name", "in", [
+					"Expense Claim Detail-sanctioned_amount-reqd",
+				]
+			]
+		]
+	},
 ]

@@ -24,6 +24,7 @@
    "unique": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "budget_account_mapping",
    "fieldtype": "Table",
    "label": "Budget Account Mapping",
@@ -48,7 +49,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-05-29 13:44:06.121708",
+ "modified": "2023-06-12 20:03:58.672838",
  "modified_by": "Administrator",
  "module": "Budgeting",
  "name": "Project Budgeting",
