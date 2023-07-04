@@ -1,3 +1,18 @@
+frappe.ui.form.on('Expense Claim', {
+
+    onload: function(frm) {
+        frm.set_value('date', frm.doc.posting_date);
+    },
+    date: function(frm) {
+        frm.set_value('posting_date', frm.doc.date);
+    },
+    posting_date: function(frm) {
+        frm.set_value('date', frm.doc.posting_date);
+    },
+
+
+});
+
 cur_frm.fields_dict["expenses"].grid.get_field("project_budget").get_query = function(doc, cdt, cdn){
     var d = locals[cdt][cdn];
 	return {
