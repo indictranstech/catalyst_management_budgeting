@@ -43,6 +43,16 @@ def get_columns():
             'fieldname': 'actual_amount',
             'label': _('Actual Amount'),
             'fieldtype': 'Currency',
+        },
+		{
+            'fieldname': 'party_type',
+            'label': _('Party Type'),
+            'fieldtype': 'Data',
+        },
+		{
+            'fieldname': 'party',
+            'label': _('Party'),
+            'fieldtype': 'Data',
         }
 	]
 
@@ -57,11 +67,13 @@ def get_data(filters):
 				"project": d["project_for_budget"],
 				"project_budget": d["project_budget"],
 				"budget_account_head": d["budget_account_head"],
-				"actual_amount": d["amount"]
+				"actual_amount": d["amount"],
+				"party_type": d["party_type"],
+				"party": d["party"],
+
 			}
 		)
 
-	print('\n\n DATA....\n', data, '\n\n\n')
 	# Filters is a dictionary of filters, so we can just filter the data straight away based on the filters dict
 	filtered_data = [d for d in data if all(item in d.items() for item in filters.items())]
 	return filtered_data
@@ -74,11 +86,62 @@ def make_data():
 	'''
 	data_ = []
 
-	pi_docs = frappe.get_all('Purchase Invoice Item', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype", "docstatus"])
-	ec_docs = frappe.get_all('Expense Claim Detail', fields=["project_for_budget", "project_budget", "budget_account_head", "amount", "modified", "parent", "parenttype", "docstatus"])
-	je_docs = frappe.get_all('Journal Entry Account', fields=["project_for_budget", "project_budget", "budget_account_head", "debit_in_account_currency", "modified", "parent", "parenttype", "docstatus"])
+	pi_docs =  frappe.db.sql(f""" 
+					select
+						pii.project_for_budget, 
+						pii.project_budget, 
+						pii.budget_account_head, 
+						pii.amount, 
+						pii.modified, 
+						pii.parent, 
+						pii.parenttype, 
+						pii.docstatus,
+						"Supplier" as party_type,
+						pi.supplier as party
+					from `tabPurchase Invoice Item` pii
+					left join `tabPurchase Invoice` pi on pii.parent = pi.name
+					where  pii.docstatus = 1 and pii.project_for_budget IS NOT NULL
+				""",as_dict=1)
 	
+	ec_docs =  frappe.db.sql(f""" 
 
+					select
+						ecd.project_for_budget, 
+						ecd.project_budget, 
+						ecd.budget_account_head, 
+						ecd.amount, 
+						ecd.modified, 
+						ecd.name,
+						ecd.parent, 
+						ecd.parenttype, 
+						ecd.docstatus,
+						ec.employee as party,
+						"Employee" as party_type
+					from `tabExpense Claim Detail` ecd
+					left join `tabExpense Claim` ec on ecd.parent = ec.name
+					where  ecd.docstatus = 1 and ecd.project_for_budget IS NOT NULL  order by ecd.project_for_budget
+
+				""",as_dict=1)
+	je_docs = frappe.db.sql(f""" 
+
+						select
+							jea.project_for_budget, 
+							jea.project_budget, 
+							jea.budget_account_head, 
+							jea.debit_in_account_currency as amount, 
+							jea.modified, 
+							jea.name,
+							jea.parent, 
+							jea.parenttype, 
+							jea.docstatus,
+							jea.party_type,
+							jea.party
+
+						from `tabJournal Entry Account` jea
+						where  jea.docstatus = 1 and jea.project_for_budget IS NOT NULL  order by jea.project_for_budget
+
+				""",as_dict=1)
+	
 	for i in pi_docs:
 		if i.project_for_budget and i.docstatus == 1:
 			data_.append(i)
@@ -88,9 +151,7 @@ def make_data():
 			data_.append(i)
 
 	for i in je_docs:
-		if i.debit_in_account_currency and i.project_for_budget and i.docstatus == 1:
-			i["amount"] = i["debit_in_account_currency"]
+		if i.amount and i.project_for_budget and i.docstatus == 1:
 			data_.append(i)
 
-	print('\n\n DATA____\n', data_, '\n\n\n')
 	return data_
