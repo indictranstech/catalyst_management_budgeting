@@ -3,6 +3,8 @@
 
 import frappe
 from frappe import _
+from frappe.utils import getdate
+from datetime import datetime, timedelta
 
 
 def execute(filters=None):
@@ -44,8 +46,18 @@ def get_columns():
             'fieldtype': 'Currency',
         },
 		{
+            'fieldname': 'selected_period_budget_amount',
+            'label': _('Selected Period Budget Amount'),
+            'fieldtype': 'Currency',
+        },
+		{
             'fieldname': 'actual_amount',
             'label': _('Actual Amount'),
+            'fieldtype': 'Currency',
+        },
+		{
+            'fieldname': 'selected_actual_amount',
+            'label': _('Selected Actual'),
             'fieldtype': 'Currency',
         },
 		{
@@ -57,7 +69,22 @@ def get_columns():
             'fieldname': 'variance_percentage',
             'label': _('Variance (%)'),
             'fieldtype': 'Data',
-        }
+        },
+		{
+            'fieldname': 'total_utilisation',
+            'label': _('Total Utilisation %'),
+            'fieldtype': 'percent',
+        },
+		{
+            'fieldname': 'selected_utilisation',
+            'label': _('Selected Utilisation %'),
+            'fieldtype': 'percent',
+        },
+		{
+            'fieldname': 'chart_of_account_head',
+            'label': _('Chart of Account Head'),
+            'fieldtype': 'Data',
+        },
 	]
 
 def get_data(filters):
@@ -77,9 +104,11 @@ def get_data(filters):
 		"period",
 		"budget_account_head",
 		"monthly_distribution",
+		"chart_of_account_head",
 		"amount",
 		"parent" # => Project Budget == project name as well
 	], filters=conditions)
+
 
 	# Make Data
 	for d in budget_account_map:
@@ -91,10 +120,32 @@ def get_data(filters):
 		d["end_date"] = frappe.get_doc("Accounting Period", d["period"]).end_date
 
 		# Actual Amount [JOURNAL ENTRY, EXPENSE CLAIM, PURCHASE INVOICE]
-		d["actual_amount"] = actual_amounts(d["project"], d["budget_account_head"], d["start_date"], d["end_date"])
-		
+		actual = actual_amounts(d["project"], d["budget_account_head"], d["start_date"], d["end_date"],getdate(filters.get("from_date")),getdate(filters.get("to_date")))
+		d["actual_amount"] = actual[0]
+
+		# selected_actual_amount
+		d["selected_actual_amount"]=actual[1]
+
+		d['selected_period_budget_amount'] = 0
+		if d['monthly_distribution']:
+			over_all_percenatage  = get_month_names_and_Selected_Period_over_all_percenatage(d['monthly_distribution'],filters.get("from_date"),filters.get("to_date"))
+			if over_all_percenatage != 0 or over_all_percenatage !=None:
+				d['selected_period_budget_amount'] = round(d['amount']* (over_all_percenatage / 100),2)
+
+
 		# Variance
 		d["variance"] = d["amount"] - d["actual_amount"]
+
+		# % Utilisation = (Total Bud-Total Act)/Total Bud 
+		if (d["amount"] != None and d["amount"]  !=0) and (d["actual_amount"] != None and d["actual_amount"]  !=0):
+			d['total_utilisation'] =round((d['amount'] -  d["actual_amount"])/d['amount'],2)
+		else:
+			d["total_utilisation"] = 0
+		# % Utilisation = (Selected Period Bud-Selected Period Act)/Selected Period Bud
+		if (d["selected_period_budget_amount"] != None and d["selected_period_budget_amount"]  !=0) and (d["selected_actual_amount"] != None and d["selected_actual_amount"]  !=0):
+			d['selected_utilisation'] =round((d['selected_period_budget_amount'] -  d["selected_actual_amount"])/d['selected_period_budget_amount'],2)
+		else:
+			d["selected_utilisation"] = 0
 
 		# Variance (%)
 			# strt fixing ZeroDivisionError 
@@ -110,15 +161,22 @@ def get_data(filters):
 	return data
 
 
-def actual_amounts(project, head, start_date, end_date):
+def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 	'''
 	Actual Amounts for Journal Entry, Expense Claim, and Purchase Entry
 	Here we make the total for each and add up
 	We take care of conditions for date, project and budget_account_head
 	'''
+	# for actual
 	pi_total = 0
 	ec_total = 0
 	je_total = 0
+
+	# for date range
+	month_pi_total = 0
+	month_ec_total = 0
+	month_je_total = 0
+
 	pi_amount = frappe.get_all('Purchase Invoice Item', filters={
 		"project_for_budget": project,
 		"budget_account_head": head,
@@ -138,16 +196,57 @@ def actual_amounts(project, head, start_date, end_date):
 	for i in pi_amount:
 		if start_date < (i.modified).date() < end_date:
 			pi_total = pi_total + i.amount
+		if month_start < (i.modified).date() < month_end:
+			month_ec_total = month_ec_total + i.amount
+
 
 	for i in ec_amount:
 		if start_date < (i.modified).date() < end_date:
 			ec_total = ec_total + i.amount
+		if month_start < (i.modified).date() < month_end:
+			month_ec_total = month_ec_total + i.amount
 
 	for i in je_amount:
 		if start_date < (i.modified).date() < end_date:
 			if i.debit_in_account_currency:
 				i["amount"] = i["debit_in_account_currency"]
 				je_total = je_total + i.amount
+			if month_start < (i.modified).date() < month_end:
+				month_je_total = month_je_total + i.amount
 
-	return pi_total + ec_total + je_total
+	return [pi_total + ec_total + je_total,month_pi_total + month_ec_total + month_je_total]
 
+
+def get_month_names_and_Selected_Period_over_all_percenatage(monthly_distribution,start_date, end_date):
+	start_date = datetime.strptime(start_date, "%Y-%m-%d")
+	end_date = datetime.strptime(end_date, "%Y-%m-%d")
+	current_date = start_date
+	month_names = []
+
+	# Define the list of month names
+	month_names_list = [
+		"January", "February", "March", "April", "May", "June", 
+		"July", "August", "September", "October", "November", "December"
+	]
+
+	while current_date <= end_date:
+		month_names.append(month_names_list[current_date.month - 1])
+		next_month = current_date.month + 1 if current_date.month < 12 else 1
+		current_date = current_date.replace(month=next_month, day=1)
+
+
+	 # Query the database to calculate the overall percentage allocation for the selected period
+	over_all_percenatage =  frappe.db.sql(f"""   
+				       select 
+				    	sum(mdp.percentage_allocation) as percentage_allocation,
+				        count(mdp.name),
+				        mdp.month
+				       
+				       from `tabMonthly Distribution` md
+				       left join `tabMonthly Distribution Percentage` mdp on md.name  = mdp.parent
+				       where md.name = '{monthly_distribution}'  and  mdp.month in {tuple(['month']+month_names)} 
+				       
+				       
+				        """,as_dict=1) 
+
+	return over_all_percenatage[0]['percentage_allocation'] if over_all_percenatage else 0

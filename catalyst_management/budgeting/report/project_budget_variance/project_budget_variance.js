@@ -27,7 +27,23 @@ frappe.query_reports["Project Budget Variance"] = {
 			"options": "Budget Account Head",
 			"width": 100,
 			"reqd": 0,
-		}
+		},
+		{
+			"fieldname": "from_date",
+			"label": __("From Date"),
+			"fieldtype": "Date",
+			"default": frappe.datetime.year_start(),
+			"width": 100,
+			"reqd": 1,
+		},	
+		{
+			"fieldname": "to_date",
+			"label": __("To Date"),
+			"fieldtype": "Date",
+			"default": frappe.datetime.year_end(),
+			"width": 100,
+			"reqd": 1,
+		},		
 	],
 
 	onload: function(report) {
