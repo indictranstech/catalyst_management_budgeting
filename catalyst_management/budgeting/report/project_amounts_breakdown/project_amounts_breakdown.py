@@ -45,6 +45,11 @@ def get_columns():
             'fieldtype': 'Currency',
         },
 		{
+            'fieldname': 'coa',
+            'label': _('Chart of account Head'),
+            'fieldtype': 'Data',
+        },
+		{
             'fieldname': 'party_type',
             'label': _('Party Type'),
             'fieldtype': 'Data',
@@ -144,14 +149,17 @@ def make_data():
 	
 	for i in pi_docs:
 		if i.project_for_budget and i.docstatus == 1:
+			i.coa = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
 			data_.append(i)
 
 	for i in ec_docs:
 		if i.project_for_budget and i.docstatus == 1:
+			i.coa  = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
 			data_.append(i)
 
 	for i in je_docs:
 		if i.amount and i.project_for_budget and i.docstatus == 1:
+			i.coa  = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
 			data_.append(i)
 
 	return data_
