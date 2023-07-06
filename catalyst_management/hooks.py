@@ -214,6 +214,7 @@ fixtures = [
 			[
 				"name", "in", [
 					"Expense Claim Detail-sanctioned_amount-reqd",
+                    "Error Log-seen-default"
 				]
 			]
 		]

@@ -14,5 +14,21 @@
   "property_type": "Check",
   "row_name": null,
   "value": "1"
+ },
+ {
+  "default_value": null,
+  "doc_type": "Error Log",
+  "docstatus": 0,
+  "doctype": "Property Setter",
+  "doctype_or_field": "DocField",
+  "field_name": "seen",
+  "is_system_generated": 0,
+  "modified": "2023-07-06 12:29:01.954834",
+  "module": null,
+  "name": "Error Log-seen-default",
+  "property": "default",
+  "property_type": "Text",
+  "row_name": null,
+  "value": "1"
  }
 ]
