@@ -138,12 +138,12 @@ def get_data(filters):
 
 		# % Utilisation = (Total Bud-Total Act)/Total Bud 
 		if (d["amount"] != None and d["amount"]  !=0) and (d["actual_amount"] != None and d["actual_amount"]  !=0):
-			d['total_utilisation'] =round((d['amount'] -  d["actual_amount"])/d['amount'],2)
+			d['total_utilisation'] =round((d['amount'] -  d["actual_amount"])/d['amount']* 100,2)
 		else:
 			d["total_utilisation"] = 0
 		# % Utilisation = (Selected Period Bud-Selected Period Act)/Selected Period Bud
 		if (d["selected_period_budget_amount"] != None and d["selected_period_budget_amount"]  !=0) and (d["selected_actual_amount"] != None and d["selected_actual_amount"]  !=0):
-			d['selected_utilisation'] =round((d['selected_period_budget_amount'] -  d["selected_actual_amount"])/d['selected_period_budget_amount'],2)
+			d['selected_utilisation'] =round((d['selected_period_budget_amount'] -  d["selected_actual_amount"])/d['selected_period_budget_amount']* 100,2)
 		else:
 			d["selected_utilisation"] = 0
 
