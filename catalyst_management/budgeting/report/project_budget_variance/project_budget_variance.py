@@ -212,6 +212,7 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 				i["amount"] = i["debit_in_account_currency"]
 				je_total = je_total + i.amount
 			if month_start < (i.modified).date() < month_end:
+				i["amount"] = i["debit_in_account_currency"]
 				month_je_total = month_je_total + i.amount
 
 	return [pi_total + ec_total + je_total,month_pi_total + month_ec_total + month_je_total]

@@ -75,7 +75,7 @@ def get_data(filters):
 				"actual_amount": d["amount"],
 				"party_type": d["party_type"],
 				"party": d["party"],
-				"coa":d['coa'] if d['coa'] != None else ''
+				"coa":d['coa'] 
 
 			}
 		)
