@@ -15,6 +15,7 @@ from erpnext.accounts.report.financial_statements import (
 
 from frappe.desk.query_report import run
 
+import datetime
 
 def execute(filters=None):
 	period_list = get_period_list(
@@ -58,43 +59,82 @@ def execute(filters=None):
 	data.extend(expense or [])
 	if net_profit_loss:
 		data.append(net_profit_loss)
-	
-	key = ''
-	if period_list[0]['key']:
-		key = period_list[0]['key']
-
-	for j in  filters.get("project"):
-		if filters.get("crrr") == 1:
-			dd = filters.copy()
-			dd.project = [j]
-			dd.crrr = 0
-			pro_fl= frappe.desk.query_report.run("Profit and Loss Statement Project Wise",dd)
-
-			# if 'result' in pro_fl:
-			for k in pro_fl['result']:
-				try:
-					index = [i for i, d in enumerate(data) if d.get('account') == k['account']][0]
-					if index:
-						data[index][str(j.replace('',"_"))] = k[str(key)]
-				except KeyError:
-					pass
-				except IndexError:
-					pass
-
 
 	columns = get_columns(
 		filters.periodicity, period_list, filters.accumulated_values, filters.company
 	)
+	
 
-	for i in filters.get("project"):
-		columns.append(
-			{
-			"fieldname":i.replace('',"_") , 
-			"label": i, 
-			"datatype": "Currency",
-			"options": "currency",
-			}
-		)
+
+	# sorted_list = sorted(period_list, key=lambda x: x['from_date'])
+	# filtered_list = []
+	# for i in sorted_list:
+	# 	filtered_list.append(i['key'])
+
+	filtered_list = [item['key'] for item in period_list]
+
+	projects = filters.get("project")
+	if projects:
+		if filters.get("crrr") == 1:
+			filters["crrr"] = 0
+			for project in projects:
+				filters["project"] = [project]
+				pro_fl = frappe.desk.query_report.run("Profit and Loss Statement Project Wise", filters)
+				for k in pro_fl['result']:
+					try:
+						index = next((i for i, d in enumerate(data) if d.get('account') == k['account']), None)
+						if index is not None:
+							for key_of_k, value_of_k in k.items():
+								if key_of_k.startswith(('jan_', 'feb_', 'mar_', 'apr_', 'may_', 'jun_', 'jul_', 'aug_', 'sep_', 'oct_', 'nov_', 'dec_')):
+									data[index][f"{project.replace('','_')}_{key_of_k}"] = value_of_k
+					except KeyError:
+						pass
+					except IndexError:
+						pass
+				for i in filtered_list:
+						columns.append(
+							{
+								"fieldname": f"{project.replace('','_')}_{i}",
+								"label": f"<b> {project} {i} </b>",
+								"datatype": "Currency",
+								"options": "currency",
+							}
+						)
+	# filtered_list = [item['key'] for item in period_list]
+
+	# for j in  filters.get("project"):
+	# 	if filters.get("crrr") == 1:
+	# 		dd = filters.copy()
+	# 		dd.project = [j]
+	# 		dd.crrr = 0
+	# 		pro_fl= frappe.desk.query_report.run("Profit and Loss Statement Project Wise",dd)
+	# 		for k in pro_fl['result']:
+	# 			try:
+	# 				index = [i for i, d in enumerate(data) if d.get('account') == k['account']][0]
+	# 				if index:
+	# 					for key_of_k, value_of_k in k.items():
+	# 						if key_of_k.startswith(('jan_', 'feb_', 'mar_', 'apr_', 'may_', 'jun_', 'jul_', 'aug_', 'sep_', 'oct_', 'nov_', 'dec_')):
+	# 							data[index][f"""{j.replace('',"_")}_{key_of_k}"""] = value_of_k
+	# 			except KeyError:
+	# 				pass
+	# 			except IndexError:
+	# 				pass
+
+
+	# columns = get_columns(
+	# 	filters.periodicity, period_list, filters.accumulated_values, filters.company
+	# )
+
+	# for j in filters.get("project"):
+	# 	for i in filtered_list:
+	# 		columns.append(
+	# 			{
+	# 			"fieldname":f"""{j.replace('',"_")}_{i}""", 
+	# 			"label": f"""<b> {j} {i} </b>""", 
+	# 			"datatype": "Currency",
+	# 			"options": "currency",
+	# 			}
+	# 		)
 
 	chart = get_chart_data(filters, columns, income, expense, net_profit_loss)
 

@@ -9,6 +9,7 @@
  "engine": "InnoDB",
  "field_order": [
   "project",
+  "company",
   "budget_account_mapping_section",
   "budget_account_mapping",
   "amended_from"
@@ -44,12 +45,20 @@
    "options": "Project Budgeting",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "project.company",
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-07 12:39:24.467929",
+ "modified": "2023-07-11 12:33:20.004880",
  "modified_by": "Administrator",
  "module": "Budgeting",
  "name": "Project Budgeting",

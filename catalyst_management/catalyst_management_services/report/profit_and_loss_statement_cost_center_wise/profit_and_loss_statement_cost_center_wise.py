@@ -69,11 +69,14 @@ def execute(filters=None):
 	data.extend(expense or [])
 	if net_profit_loss:
 		data.append(net_profit_loss)
-	
-	key = ''
-	if period_list[0]['key']:
-		key = period_list[0]['key']
 
+
+
+	columns = get_columns(
+		filters.periodicity, period_list, filters.accumulated_values, filters.company
+	)
+
+	filtered_list = [item['key'] for item in period_list]
 
 
 	for j in  filters.get("cost_center"):
@@ -85,29 +88,29 @@ def execute(filters=None):
 
 			for k in pro_fl['result']:
 				try:
-					# index = [i for i, d in enumerate(data) if d.get('account') == k['account']][0]
 					dict_comp = {item.get('account'): index for index, item in enumerate(data)}
 					index=dict_comp.get(k['account'])
 					if index:
-						data[index][str(j.replace('',"_"))] = k[str(key)]
+						for key_of_k, value_of_k in k.items():
+							if key_of_k.startswith(('jan_', 'feb_', 'mar_', 'apr_', 'may_', 'jun_', 'jul_', 'aug_', 'sep_', 'oct_', 'nov_', 'dec_')):
+								data[index][f"{j.replace('','_')}_{key_of_k}"] = value_of_k
+							
 				except KeyError:
 					pass
 				except IndexError:
 					pass
 
-	columns = get_columns(
-		filters.periodicity, period_list, filters.accumulated_values, filters.company
-	)
 
-	for i in filters.get("cost_center"):
-		columns.append(
-			{
-			"fieldname":i.replace('',"_") , 
-			"label": i, 
-			"datatype": "Currency",
-			"options": "currency",
-			}
-		)
+	for j in filters.get("cost_center"):
+		for i in filtered_list:
+			columns.append(
+				{
+					"fieldname": f"{j.replace('','_')}_{i}",
+					"label": f"<b> {j} {i} </b>",
+					"datatype": "Currency",
+					"options": "currency",
+				}
+			)
 
 	chart = get_chart_data(filters, columns, income, expense, net_profit_loss)
 

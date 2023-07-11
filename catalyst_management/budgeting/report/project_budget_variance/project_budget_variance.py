@@ -95,7 +95,7 @@ def get_data(filters):
 	if filters.get("project"): conditions.append(["parent", "=", filters.get("project")])
 	if filters.get("budget_account_head"): conditions.append(["budget_account_head", "=", filters.get("budget_account_head")])
 	conditions.append({"docstatus": 1})
-
+	frappe.msgprint(str(conditions))
 		# Data
 	''' 
 	Our main data is actually from a chilldtable from Project Budgeting Doctype
@@ -182,6 +182,7 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 		"budget_account_head": head,
 		"docstatus": 1
 	}, fields=["project_for_budget", "budget_account_head", "amount", "modified"])
+
 	ec_amount = frappe.get_all('Expense Claim Detail', filters={
 		"project_for_budget": project,
 		"budget_account_head": head,
