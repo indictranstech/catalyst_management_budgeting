@@ -95,7 +95,6 @@ def get_data(filters):
 	if filters.get("project"): conditions.append(["parent", "=", filters.get("project")])
 	if filters.get("budget_account_head"): conditions.append(["budget_account_head", "=", filters.get("budget_account_head")])
 	conditions.append({"docstatus": 1})
-	frappe.msgprint(str(conditions))
 		# Data
 	''' 
 	Our main data is actually from a chilldtable from Project Budgeting Doctype

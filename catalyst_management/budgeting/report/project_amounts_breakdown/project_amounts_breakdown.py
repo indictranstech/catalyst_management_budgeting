@@ -12,6 +12,11 @@ def execute(filters=None):
 def get_columns():
 	return [
 		{
+            'fieldname': 'posting_date',
+            'label': _('Posting Date'),
+            'fieldtype': 'Date',
+        },
+		{
             'fieldname': 'document',
             'label': _('Document'),
             'fieldtype': 'Data',
@@ -38,6 +43,12 @@ def get_columns():
             'label': _('Budget Account Head'),
             'fieldtype': 'Link',
             'options': 'Budget Account Head'
+        },
+		{
+            'fieldname': 'cost_center',
+            'label': _('Cost Center'),
+            'fieldtype': 'Link',
+            'options': 'Cost Center'
         },
 		{
             'fieldname': 'actual_amount',
@@ -75,7 +86,9 @@ def get_data(filters):
 				"actual_amount": d["amount"],
 				"party_type": d["party_type"],
 				"party": d["party"],
-				"coa":d['coa'] 
+				"coa":d['coa'],
+				"posting_date":d['posting_date'],
+				"cost_center":d['cost_center'],
 
 			}
 		)
@@ -102,6 +115,9 @@ def make_data():
 						pii.parent, 
 						pii.parenttype, 
 						pii.docstatus,
+						pii.cost_center,
+						pi.posting_date,
+
 						"Supplier" as party_type,
 						pi.supplier as party
 					from `tabPurchase Invoice Item` pii
@@ -121,8 +137,11 @@ def make_data():
 						ecd.parent, 
 						ecd.parenttype, 
 						ecd.docstatus,
+						ecd.cost_center,
+						ec.posting_date,
 						ec.employee as party,
 						"Employee" as party_type
+			  
 					from `tabExpense Claim Detail` ecd
 					left join `tabExpense Claim` ec on ecd.parent = ec.name
 					where  ecd.docstatus = 1 and ecd.project_for_budget IS NOT NULL  order by ecd.project_for_budget
@@ -141,9 +160,12 @@ def make_data():
 							jea.parenttype, 
 							jea.docstatus,
 							jea.party_type,
-							jea.party
+							jea.party,
+							jea.cost_center,
+			 				je.posting_date
 
 						from `tabJournal Entry Account` jea
+			 			left join `tabJournal Entry` je on je.name = jea.parent
 						where  jea.docstatus = 1 and jea.project_for_budget IS NOT NULL  order by jea.project_for_budget
 
 				""",as_dict=1)

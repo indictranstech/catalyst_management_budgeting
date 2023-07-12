@@ -94,7 +94,6 @@ def execute(filters=None):
 						for key_of_k, value_of_k in k.items():
 							if key_of_k.startswith(('jan_', 'feb_', 'mar_', 'apr_', 'may_', 'jun_', 'jul_', 'aug_', 'sep_', 'oct_', 'nov_', 'dec_')):
 								data[index][f"{j.replace('','_')}_{key_of_k}"] = value_of_k
-							
 				except KeyError:
 					pass
 				except IndexError:
