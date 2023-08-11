@@ -204,7 +204,7 @@ doctype_js = {
 # ]
 
 # Authentication and authorization
-
+# --------------------------------
 
 # auth_hooks = [
 #	"catalyst_management.auth.validate"
