@@ -15,14 +15,15 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 
 	erpnext.utils.add_dimensions('Profit and Loss Statement Project Wise', 10);
 
-	frappe.query_reports["Profit and Loss Statement Project Wise"]["filters"].push({
-		"fieldname": "project",
-		"label": __("Project"),
-		"fieldtype": "MultiSelectList",
-		get_data: function(txt) {
-			return frappe.db.get_link_options('Project', txt);
-		}
-	}, 
+	frappe.query_reports["Profit and Loss Statement Project Wise"]["filters"].push(
+	// 	{
+	// 	"fieldname": "project",
+	// 	"label": __("Project"),
+	// 	"fieldtype": "MultiSelectList",
+	// 	get_data: function(txt) {
+	// 		return frappe.db.get_link_options('Project', txt);
+	// 	}
+	// }, 
 	{
 		"fieldname": "all_project",
 		"label": __("All Project"),
