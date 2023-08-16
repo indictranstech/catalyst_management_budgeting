@@ -222,5 +222,5 @@ fixtures = [
 				]
 			]
 		]
-	},'Role',
+	},'Role','Workflow',
 ]
