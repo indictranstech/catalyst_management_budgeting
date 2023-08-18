@@ -95,7 +95,7 @@ def execute(filters=None):
 						columns.append(
 							{
 								"fieldname": f"{project.replace('','_')}_{i}",
-								"label": f"<b> {project} {i} </b>",
+								"label": f"<b> {project} </b>",
 								"datatype": "Currency",
 								"options": "currency",
 							}
