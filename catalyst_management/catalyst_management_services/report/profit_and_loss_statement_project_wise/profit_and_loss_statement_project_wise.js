@@ -37,6 +37,7 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 				args: {
 					'doctype': 'Project',
 					'fields': ['name'],
+					'filters':{'company':frappe.query_report.get_filter_value('company')},
 					"limit_page_length":10000,
 					"order_by":"name"
 				},
