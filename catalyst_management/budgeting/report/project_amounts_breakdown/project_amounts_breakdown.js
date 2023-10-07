@@ -27,7 +27,23 @@ frappe.query_reports["Project Amounts Breakdown"] = {
 			"options": "Budget Account Head",
 			"width": 100,
 			"reqd": 0,
-		}
+		},
+		{
+			"fieldname": "from_date",
+			"label": __("From Date"),
+			"fieldtype": "Date",
+			// "default": frappe.datetime.month_start(),
+			"width": 100,
+			"reqd": 0,
+		},	
+		{
+			"fieldname": "to_date",
+			"label": __("To Date"),
+			"fieldtype": "Date",
+			// "default": frappe.datetime.month_end(),
+			"width": 100,
+			"reqd": 0,
+		},		
 	],
 
 	onload: function(report) {

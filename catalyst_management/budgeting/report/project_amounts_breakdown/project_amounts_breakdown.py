@@ -3,6 +3,9 @@
 
 import frappe
 from frappe import _
+from frappe.utils import getdate
+from datetime import datetime, timedelta
+from datetime import datetime
 
 
 def execute(filters=None):
@@ -74,7 +77,11 @@ def get_columns():
 
 def get_data(filters):
 	data = []
-
+	from_date = filters.get("from_date")
+	to_date = filters.get("to_date")
+	project = filters.get('project')
+	document = filters.get('document')
+	budget_account_head = filters.get('budget_account_head')
 	for d in make_data():
 		data.append(
 			{
@@ -94,8 +101,34 @@ def get_data(filters):
 		)
 
 	# Filters is a dictionary of filters, so we can just filter the data straight away based on the filters dict
-	filtered_data = [d for d in data if all(item in d.items() for item in filters.items())]
-	return filtered_data
+	if from_date and to_date and project and document and budget_account_head:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['project'] == project and d['document'] == document and d['budget_account_head'] == budget_account_head]
+		return filtered_data
+	if from_date and to_date:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date]
+		return filtered_data	
+	elif from_date and to_date and document:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['document'] == document]
+		return filtered_data
+	elif from_date and to_date and project:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['project'] == project]
+		return filtered_data
+	elif from_date and to_date and budget_account_head:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['budget_account_head'] == budget_account_head]
+		return filtered_data
+	else:	
+		filtered_data = [d for d in data if all(item in d.items() for item in filters.items())]
+		return filtered_data
 
 def make_data():
 	'''
