@@ -101,34 +101,66 @@ def get_data(filters):
 		)
 
 	# Filters is a dictionary of filters, so we can just filter the data straight away based on the filters dict
-	if from_date and to_date and project and document and budget_account_head:
-		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
-		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
-		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['project'] == project and d['document'] == document and d['budget_account_head'] == budget_account_head]
-		return filtered_data
-	if from_date and to_date:
-		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
-		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
-		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date]
-		return filtered_data	
-	elif from_date and to_date and document:
+	if from_date and to_date and document and not project and not budget_account_head:
 		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
 		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
 		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['document'] == document]
 		return filtered_data
-	elif from_date and to_date and project:
+
+	if from_date and to_date and project and not document and not budget_account_head:
 		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
 		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
 		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['project'] == project]
 		return filtered_data
-	elif from_date and to_date and budget_account_head:
+
+	if from_date and to_date and budget_account_head and not project and not document :
 		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
 		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
 		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['budget_account_head'] == budget_account_head]
 		return filtered_data
+
+	if from_date and to_date and document and project and not budget_account_head:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['document'] == document and d['project'] == project]
+		return filtered_data
+
+	if from_date and to_date and document and not project and budget_account_head:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['document'] == document and d['budget_account_head'] == budget_account_head]
+		return filtered_data
+
+	if from_date and to_date and not document and project and budget_account_head:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['project'] == project and d['budget_account_head'] == budget_account_head]
+		return filtered_data					
+
+	
+
+	if from_date and to_date and not budget_account_head and not project and not document:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date]
+		return filtered_data
+
+	if from_date and to_date and document and project and budget_account_head:
+		from_date = datetime.strptime(filters['from_date'], '%Y-%m-%d').date()
+		to_date = datetime.strptime(filters['to_date'], '%Y-%m-%d').date()
+		filtered_data = [d for d in data if from_date <=  d['posting_date'] <= to_date and d['project'] == project and d['document'] == document and d['budget_account_head'] == budget_account_head]
+		return filtered_data
+				
+		
 	else:	
 		filtered_data = [d for d in data if all(item in d.items() for item in filters.items())]
 		return filtered_data
+
+		
+
+	
+
+			
 
 def make_data():
 	'''
