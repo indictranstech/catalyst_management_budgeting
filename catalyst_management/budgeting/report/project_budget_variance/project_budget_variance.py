@@ -180,41 +180,46 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 		"project_for_budget": project,
 		"budget_account_head": head,
 		"docstatus": 1
-	}, fields=["project_for_budget", "budget_account_head", "amount", "modified"])
+	}, fields=["project_for_budget", "budget_account_head", "amount", "modified", "parent"])
 
 	ec_amount = frappe.get_all('Expense Claim Detail', filters={
 		"project_for_budget": project,
 		"budget_account_head": head,
 		"docstatus": 1
-	}, fields=["project_for_budget", "budget_account_head", "amount", "modified"])
+	}, fields=["project_for_budget", "budget_account_head", "amount", "modified", "parent"])
 	je_amount = frappe.get_all('Journal Entry Account', filters={
 		"project_for_budget": project,
 		"budget_account_head": head,
 		"docstatus": 1
-	}, fields=["project_for_budget", "budget_account_head", "debit_in_account_currency", "modified"])
+	}, fields=["project_for_budget", "budget_account_head", "debit_in_account_currency", "modified","parent"])
 
 	for i in pi_amount:
-		if start_date < (i.modified).date() < end_date:
+		pi_doc = frappe.get_doc('Purchase Invoice', i['parent'])
+		posting_date = pi_doc.posting_date
+		if start_date <= posting_date <= end_date:
 			pi_total = pi_total + i.amount
-		if month_start < (i.modified).date() < month_end:
-			month_ec_total = month_ec_total + i.amount
+		if month_start <= posting_date <= month_end:
+			month_pi_total = month_pi_total + i.amount
 
 
 	for i in ec_amount:
-		if start_date < (i.modified).date() < end_date:
+		ec_doc = frappe.get_doc('Expense Claim', i['parent'])
+		posting_date = ec_doc.posting_date
+		if start_date <= posting_date <= end_date:
 			ec_total = ec_total + i.amount
-		if month_start < (i.modified).date() < month_end:
+		if month_start <= posting_date <= month_end:
 			month_ec_total = month_ec_total + i.amount
 
 	for i in je_amount:
-		if start_date < (i.modified).date() < end_date:
+		je_doc = frappe.get_doc('Journal Entry', i['parent'])
+		posting_date = je_doc.posting_date
+		if start_date <= posting_date <= end_date:
 			if i.debit_in_account_currency:
 				i["amount"] = i["debit_in_account_currency"]
 				je_total = je_total + i.amount
-			if month_start < (i.modified).date() < month_end:
+			if month_start <= posting_date <= month_end:
 				i["amount"] = i["debit_in_account_currency"]
 				month_je_total = month_je_total + i.amount
-
 	return [pi_total + ec_total + je_total,month_pi_total + month_ec_total + month_je_total]
 
 
