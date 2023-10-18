@@ -119,6 +119,11 @@ doctype_js = {
 #		"on_trash": "method"
 #	}
 # }
+doc_events = {
+	"Project": {
+		"before_save": "catalyst_management.custom_script.project.project_custom.date_log",
+	}
+}
 
 # Scheduled Tasks
 # ---------------
