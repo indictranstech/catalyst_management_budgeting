@@ -129,7 +129,9 @@ def get_data(filters):
 		if d['monthly_distribution']:
 			over_all_percenatage  = get_month_names_and_Selected_Period_over_all_percenatage(d['monthly_distribution'],filters.get("from_date"),filters.get("to_date"))
 			if over_all_percenatage != 0 or over_all_percenatage !=None:
-				d['selected_period_budget_amount'] = round(d['amount']* (over_all_percenatage / 100),2)
+				# d['selected_period_budget_amount'] = round(d['amount']* (over_all_percenatage / 100),2)
+				d['selected_period_budget_amount'] = round(over_all_percenatage)
+
 
 
 		# Variance
@@ -244,7 +246,7 @@ def get_month_names_and_Selected_Period_over_all_percenatage(monthly_distributio
 	 # Query the database to calculate the overall percentage allocation for the selected period
 	over_all_percenatage =  frappe.db.sql(f"""   
 				       select 
-				    	sum(mdp.percentage_allocation) as percentage_allocation,
+				    	sum(mdp.amount_allocation) as percentage_allocation,
 				        count(mdp.name),
 				        mdp.month
 				       
