@@ -1,0 +1,45 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-10-17 10:17:37.825906",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "expected_start_date",
+  "expected_end_date",
+  "on"
+ ],
+ "fields": [
+  {
+   "fieldname": "expected_start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Expected Start Date"
+  },
+  {
+   "fieldname": "expected_end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Expected End Date"
+  },
+  {
+   "fieldname": "on",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Change on"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-10-17 10:17:48.504022",
+ "modified_by": "Administrator",
+ "module": "Catalyst Management Services",
+ "name": "Project Dates Log",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
