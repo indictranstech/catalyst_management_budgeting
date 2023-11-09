@@ -58,10 +58,23 @@ def get_columns():
             'label': _('Actual Amount'),
             'fieldtype': 'Currency',
         },
+		# {
+        #     'fieldname': 'coa',
+        #     'label': _('Chart of account Head'),
+        #     'fieldtype': 'Data',
+        # },
 		{
             'fieldname': 'coa',
             'label': _('Chart of account Head'),
-            'fieldtype': 'Data',
+            'fieldtype': 'Link',
+			'options': 'Account',
+        },
+		{
+            'fieldname': 'pdm',
+            'label': _('Name'),
+            'fieldtype': 'Link',
+			'options': 'Budget Account Mapping',
+			'hidden':1
         },
 		{
             'fieldname': 'party_type',
@@ -94,6 +107,7 @@ def get_data(filters):
 				"party_type": d["party_type"],
 				"party": d["party"],
 				"coa":d['coa'],
+				"pdm":d['pdm'],
 				"posting_date":d['posting_date'],
 				"cost_center":d['cost_center'],
 
@@ -238,16 +252,19 @@ def make_data():
 	for i in pi_docs:
 		if i.project_for_budget and i.docstatus == 1:
 			i.coa = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
+			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
 			data_.append(i)
 
 	for i in ec_docs:
 		if i.project_for_budget and i.docstatus == 1:
 			i.coa  = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
+			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
 			data_.append(i)
 
 	for i in je_docs:
 		if i.amount and i.project_for_budget and i.docstatus == 1:
 			i.coa  = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
+			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
 			data_.append(i)
 
 	return data_
