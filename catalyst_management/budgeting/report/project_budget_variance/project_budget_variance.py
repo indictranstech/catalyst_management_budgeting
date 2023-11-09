@@ -80,10 +80,23 @@ def get_columns():
             'label': _('Selected Utilisation %'),
             'fieldtype': 'percent',
         },
+		# {
+        #     'fieldname': 'chart_of_account_head',
+        #     'label': _('Chart of Account Head'),
+        #     'fieldtype': 'Data',
+        # },
 		{
             'fieldname': 'chart_of_account_head',
             'label': _('Chart of Account Head'),
-            'fieldtype': 'Data',
+            'fieldtype': 'Link',
+			'options': 'Account',
+        },
+		{
+            'fieldname': 'name',
+            'label': _('name'),
+            'fieldtype': 'Link',
+            'options': 'Budget Account Mapping',
+			'hidden':1
         },
 	]
 
@@ -100,6 +113,7 @@ def get_data(filters):
 	Our main data is actually from a chilldtable from Project Budgeting Doctype
 	'''
 	budget_account_map = frappe.db.get_all('Budget Account Mapping', [
+		"name",
 		"period",
 		"budget_account_head",
 		"monthly_distribution",
@@ -112,6 +126,7 @@ def get_data(filters):
 	# Make Data
 	for d in budget_account_map:
 		# Change fieldname for Project
+		d["name"] = d["name"]
 		d["project"] = d["parent"]
 
 		# Start and End Date from Accounting Period
@@ -139,12 +154,14 @@ def get_data(filters):
 
 		# % Utilisation = (Total Bud-Total Act)/Total Bud 
 		if (d["amount"] != None and d["amount"]  !=0) and (d["actual_amount"] != None and d["actual_amount"]  !=0):
-			d['total_utilisation'] =round((d['amount'] -  d["actual_amount"])/d['amount']* 100,2)
+			# d['total_utilisation'] =round((d['amount'] -  d["actual_amount"])/d['amount']* 100,2)
+			d['total_utilisation'] =round((d["actual_amount"])/d['amount']* 100,2)
 		else:
 			d["total_utilisation"] = 0
 		# % Utilisation = (Selected Period Bud-Selected Period Act)/Selected Period Bud
 		if (d["selected_period_budget_amount"] != None and d["selected_period_budget_amount"]  !=0) and (d["selected_actual_amount"] != None and d["selected_actual_amount"]  !=0):
-			d['selected_utilisation'] =round((d['selected_period_budget_amount'] -  d["selected_actual_amount"])/d['selected_period_budget_amount']* 100,2)
+			# d['selected_utilisation'] =round((d['selected_period_budget_amount'] -  d["selected_actual_amount"])/d['selected_period_budget_amount']* 100,2)
+			d['selected_utilisation'] =round((d["selected_actual_amount"])/d['selected_period_budget_amount']* 100,2)
 		else:
 			d["selected_utilisation"] = 0
 
