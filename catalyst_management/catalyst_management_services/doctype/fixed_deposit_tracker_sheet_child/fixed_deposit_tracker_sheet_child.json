@@ -1,0 +1,100 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-20 17:43:02.337544",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "fd_account_no",
+  "fd_opening_balance",
+  "new_fixed_deposit_for_the_year",
+  "particulars",
+  "rate_of_interest",
+  "section_break_ishiq",
+  "fd_start_date",
+  "fd_maturity_date",
+  "interest_accured",
+  "fd_matured_amount",
+  "disable"
+ ],
+ "fields": [
+  {
+   "fieldname": "fd_account_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "FD Account No."
+  },
+  {
+   "fieldname": "fd_opening_balance",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "FD Opening Balance"
+  },
+  {
+   "fieldname": "new_fixed_deposit_for_the_year",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "New Fixed deposit for the year"
+  },
+  {
+   "fieldname": "particulars",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Particulars"
+  },
+  {
+   "fieldname": "rate_of_interest",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Rate of Interest"
+  },
+  {
+   "fieldname": "fd_start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "FD Start Date"
+  },
+  {
+   "fieldname": "fd_maturity_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "FD Maturity Date"
+  },
+  {
+   "fieldname": "interest_accured",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Interest / Accured"
+  },
+  {
+   "fieldname": "fd_matured_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "FD Matured Amount"
+  },
+  {
+   "default": "0",
+   "fieldname": "disable",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Disable"
+  },
+  {
+   "fieldname": "section_break_ishiq",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-11-20 17:49:43.866235",
+ "modified_by": "Administrator",
+ "module": "Catalyst Management Services",
+ "name": "Fixed Deposit Tracker Sheet Child",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
