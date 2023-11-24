@@ -9,6 +9,9 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
+  "column_break_mdhaz",
+  "company",
+  "section_break_jlacs",
   "fixed_deposit_tracker_sheet",
   "amended_from"
  ],
@@ -37,11 +40,25 @@
    "label": "Series",
    "options": "FD-23-24.-\nFD-24-25.-",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_mdhaz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "section_break_jlacs",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-11-20 20:12:03.826819",
+ "modified": "2023-11-24 18:59:49.708176",
  "modified_by": "Administrator",
  "module": "Catalyst Management Services",
  "name": "Fixed Deposit Tracker Sheet",
