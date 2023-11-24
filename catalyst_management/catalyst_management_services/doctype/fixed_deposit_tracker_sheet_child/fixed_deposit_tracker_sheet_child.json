@@ -16,6 +16,7 @@
   "fd_maturity_date",
   "interest_accured",
   "fd_matured_amount",
+  "fd_closing_balance_as_per_confirmation",
   "disable"
  ],
  "fields": [
@@ -83,12 +84,18 @@
   {
    "fieldname": "section_break_ishiq",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fd_closing_balance_as_per_confirmation",
+   "fieldtype": "Currency",
+   "in_standard_filter": 1,
+   "label": "FD Closing Balance as per Confirmation "
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-11-20 17:49:43.866235",
+ "modified": "2023-11-24 11:38:06.364180",
  "modified_by": "Administrator",
  "module": "Catalyst Management Services",
  "name": "Fixed Deposit Tracker Sheet Child",
