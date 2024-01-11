@@ -123,9 +123,9 @@ doc_events = {
 	"Project": {
 		"before_save": "catalyst_management.custom_script.project.project_custom.date_log",
 	},
-	"Journal Entry": {
-		"before_save": "catalyst_management.custom_script.journal_entry.journal_entry.before_save",
-	}
+	# "Journal Entry": {
+	# 	"before_save": "catalyst_management.custom_script.journal_entry.journal_entry.before_save",
+	# }
 }
 
 # Scheduled Tasks
