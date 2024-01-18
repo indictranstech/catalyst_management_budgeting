@@ -42,8 +42,8 @@ frappe.query_reports["Project Monthly Budget"] = {
 		report.page.add_inner_button(__("Project Amounts Breakdown"), function() {
 			frappe.set_route('query-report', 'Project Amounts Breakdown',frappe.query_report.get_filter_values());
 		});
-		report.page.add_inner_button(__("Project Budget Variance"), function() {
-			frappe.set_route('query-report', 'Project Budget Variance',frappe.query_report.get_filter_values());
+		report.page.add_inner_button(__("Updated Project Budget Variance"), function() {
+			frappe.set_route('query-report', 'Updated Project Budget Variance',frappe.query_report.get_filter_values());
 		});
 	}
 };
