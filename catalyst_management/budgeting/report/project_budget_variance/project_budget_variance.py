@@ -136,7 +136,7 @@ def get_data(filters):
 		# Actual Amount [JOURNAL ENTRY, EXPENSE CLAIM, PURCHASE INVOICE]
 		actual = actual_amounts(d["project"], d["budget_account_head"], d["start_date"], d["end_date"],getdate(filters.get("from_date")),getdate(filters.get("to_date")))
 		d["actual_amount"] = actual[0]
-
+		
 		# selected_actual_amount
 		d["selected_actual_amount"]=actual[1]
 
@@ -253,12 +253,18 @@ def get_month_names_and_Selected_Period_over_all_percenatage(monthly_distributio
 		"January", "February", "March", "April", "May", "June", 
 		"July", "August", "September", "October", "November", "December"
 	]
-
+	
 	while current_date <= end_date:
 		month_names.append(month_names_list[current_date.month - 1])
 		next_month = current_date.month + 1 if current_date.month < 12 else 1
-		current_date = current_date.replace(month=next_month, day=1)
-
+		# current_date = current_date.replace(month=next_month, day=1)
+		if current_date.month == 12:
+			next_year = current_date.year + 1
+		else:
+			next_year = current_date.year
+		current_date = current_date.replace(month=next_month, year=next_year, day=1)	
+    
+	# print(month_names)	
 
 	 # Query the database to calculate the overall percentage allocation for the selected period
 	over_all_percenatage =  frappe.db.sql(f"""   
@@ -272,6 +278,7 @@ def get_month_names_and_Selected_Period_over_all_percenatage(monthly_distributio
 				       where md.name = '{monthly_distribution}'  and  mdp.month in {tuple(['month']+month_names)} 
 				       
 				       
-				        """,as_dict=1) 
+				        """,as_dict=1)
+
 
 	return over_all_percenatage[0]['percentage_allocation'] if over_all_percenatage else 0
