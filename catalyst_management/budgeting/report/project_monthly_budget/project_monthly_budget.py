@@ -1,14 +1,65 @@
 # Copyright (c) 2023, Simon Wanyama and contributors
 # For license information, please see license.txt
 
+import copy
+from collections import OrderedDict
+
 import frappe
 from frappe import _
-
+from frappe.utils import date_diff, flt, getdate
 
 def execute(filters=None):
-	return get_columns(), get_data(filters)
+    # if not filters:
+    #     return [], [], None, []
 
-def get_columns():
+
+    columns = get_columns(filters)
+    conditions = get_conditions(filters)
+    data = get_data(conditions, filters)
+
+    if not data:
+        return [], [], None, []
+
+    data
+
+    return columns, data, None
+
+def get_conditions(filters):
+    conditions = ""
+    if filters.get("period"):
+        conditions += " and bam.period = %(period)s"
+ 
+    if(filters.get('project')):
+      conditions += " and pb.name = %(project)s"
+
+    if(filters.get('budget_account_head')):
+      conditions += " and bam.budget_account_head = %(budget_account_head)s"
+       
+    if filters.get("budget_month"):
+        conditions += " and mdp.month = %(budget_month)s"    
+
+    return conditions
+
+
+
+def get_data(conditions,filters):
+    data = frappe.db.sql("""
+       SELECT  bam.period AS period,
+	   pb.name AS project,
+	   bam.budget_account_head AS budget_account_head,
+	   bam.amount AS budget_amount,
+	   mdp.month As budget_month,
+	   mdp.amount_allocation AS monthly_distribution
+       FROM `tabProject Budgeting` pb,`tabBudget Account Mapping` bam,`tabMonthly Distribution` md, `tabMonthly Distribution Percentage` mdp WHERE pb.docstatus = 1 and pb.name = bam.parent and pb.name = md.custom_project and bam.budget_account_head = md.custom_budget_account_head and md.name = mdp.parent and mdp.amount_allocation > 0{conditions}
+    """.format(
+        conditions=conditions
+    ), filters, as_dict=1)
+
+   
+    return data
+
+
+def get_columns(filters):
 	return [
 		{
             'fieldname': 'period',
@@ -34,66 +85,13 @@ def get_columns():
 			"label": "Distribution Month",
 		},
 		{
-			"fieldname": "monthly_budget_amount",
+			"fieldname": "monthly_distribution",
 			"fieldtype": "Currency",
-			"label": "Monthly Budget Amount",
+			"label": "Monthly Distribution",
 		},
         {
-            'fieldname': 'amount',
+            'fieldname': 'budget_amount',
             'label': _('Budget Amount'),
             'fieldtype': 'Currency',
         },
 	]
-
-def get_data(filters):
-	# conditions for filters
-	conditions, data = [], []
-	conditions.append({"docstatus": 1})
-
-		# Data
-	''' 
-	Our main data is actually from a chilldtable from Project Budgeting Doctype
-	'''
-	budget_account_map = frappe.db.get_all('Budget Account Mapping', [
-		"period",
-		"budget_account_head",
-		"monthly_distribution",
-		"amount",
-		"modified",
-		"docstatus",
-		"parent" # => Project Budget == project name as well
-	], filters=conditions)
-
-	# Make Data
-	for d in budget_account_map:
-		# Change fieldname for Project
-		d["project"] = d["parent"]
-
-		# Check if transaction falls in this month
-		created = d["modified"].date().strftime("%Y-%B").split('-')
-		dist = frappe.get_doc("Monthly Distribution", d["monthly_distribution"])
-		if created[0] == dist.fiscal_year:
-			d["budget_month"] = created[1]
-
-		for m in monthly_distribution_percentages(d["monthly_distribution"]):
-			if m.month == d["budget_month"]:
-				d["monthly_budget_amount"] = ((m.percentage_allocation / 100) * total_budget(d["project"], budget_account_map))
-
-		# Add to Data
-		data.append(d)
-
-	# ALways return filtered data
-	filtered_data = [d for d in data if all(item in d.items() for item in filters.items())]
-	return filtered_data
-
-def total_budget(project, budget_account_map):
-	amounts = list(filter(lambda x: x['parent'] == project, budget_account_map))
-	amount_list = [x['amount'] for x in amounts]
-	return sum(amount_list)
-
-def monthly_distribution_percentages(dist):
-	distributions = frappe.get_all("Monthly Distribution Percentage", 
-		filters={"parent": dist},
-		fields=["month", "percentage_allocation", "parent"])
-	return distributions
-
