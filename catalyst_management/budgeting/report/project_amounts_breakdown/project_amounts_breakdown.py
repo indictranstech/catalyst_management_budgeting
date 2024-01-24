@@ -42,6 +42,11 @@ def get_columns():
             'options': 'Project Budgeting'
         },
 		{
+            'fieldname': 'pbah',
+            'label': _('Parent Budget Account Head'),
+            'fieldtype': 'Data',
+        },
+		{
             'fieldname': 'budget_account_head',
             'label': _('Budget Account Head'),
             'fieldtype': 'Link',
@@ -74,7 +79,8 @@ def get_columns():
             'label': _('Name'),
             'fieldtype': 'Link',
 			'options': 'Budget Account Mapping',
-			'hidden':1
+			'hidden':1,
+			
         },
 		{
             'fieldname': 'party_type',
@@ -84,6 +90,11 @@ def get_columns():
 		{
             'fieldname': 'party',
             'label': _('Party'),
+            'fieldtype': 'Data',
+        },
+		{
+            'fieldname': 'coa_from_transaction',
+            'label': _('COA From Transaction'),
             'fieldtype': 'Data',
         }
 	]
@@ -102,6 +113,7 @@ def get_data(filters):
 				"document_name": d["parent"],
 				"project": d["project_for_budget"],
 				"project_budget": d["project_budget"],
+				"pbah":d['pbah'],
 				"budget_account_head": d["budget_account_head"],
 				"actual_amount": d["amount"],
 				"party_type": d["party_type"],
@@ -110,6 +122,7 @@ def get_data(filters):
 				"pdm":d['pdm'],
 				"posting_date":d['posting_date'],
 				"cost_center":d['cost_center'],
+				"coa_from_transaction":d['coa_from_transaction'],
 
 			}
 		)
@@ -194,6 +207,7 @@ def make_data():
 						pii.parent, 
 						pii.parenttype, 
 						pii.docstatus,
+						pii.expense_account as coa_from_transaction,
 						pii.cost_center,
 						pi.posting_date,
 
@@ -217,6 +231,7 @@ def make_data():
 						ecd.parenttype, 
 						ecd.docstatus,
 						ecd.cost_center,
+						ecd.default_account as coa_from_transaction,
 						ec.posting_date,
 						ec.employee as party,
 						"Employee" as party_type
@@ -241,6 +256,7 @@ def make_data():
 							jea.party_type,
 							jea.party,
 							jea.cost_center,
+							jea.account as coa_from_transaction,
 			 				je.posting_date
 
 						from `tabJournal Entry Account` jea
@@ -253,18 +269,21 @@ def make_data():
 		if i.project_for_budget and i.docstatus == 1:
 			i.coa = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
 			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'parent_budget_account_head'))
 			data_.append(i)
 
 	for i in ec_docs:
 		if i.project_for_budget and i.docstatus == 1:
 			i.coa  = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
 			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'parent_budget_account_head'))
 			data_.append(i)
 
 	for i in je_docs:
 		if i.amount and i.project_for_budget and i.docstatus == 1:
 			i.coa  = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
 			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'parent_budget_account_head'))
 			data_.append(i)
 
 	return data_

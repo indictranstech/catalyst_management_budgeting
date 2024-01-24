@@ -35,6 +35,11 @@ def get_columns():
             'options': 'Project Budgeting'
         },
 		{
+            'fieldname': 'parent_budget_account_head',
+            'label': _('Parent Budget Account Head'),
+            'fieldtype': 'Data',
+        },
+		{
             'fieldname': 'budget_account_head',
             'label': _('Budget Account Head'),
             'fieldtype': 'Link',
@@ -116,6 +121,7 @@ def get_data(filters):
 		"name",
 		"period",
 		"budget_account_head",
+		"parent_budget_account_head",
 		"monthly_distribution",
 		"chart_of_account_head",
 		"amount",
@@ -128,6 +134,7 @@ def get_data(filters):
 		# Change fieldname for Project
 		d["name"] = d["name"]
 		d["project"] = d["parent"]
+		d["parent_budget_account_head"] = d["parent_budget_account_head"]
 
 		# Start and End Date from Accounting Period
 		d["start_date"] = frappe.get_doc("Accounting Period", d["period"]).start_date
