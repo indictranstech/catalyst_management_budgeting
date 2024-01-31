@@ -123,6 +123,19 @@ doc_events = {
 	"Project": {
 		"before_save": "catalyst_management.custom_script.project.project_custom.date_log",
 	},
+	"Monthly Distribution": {
+		"before_save": "catalyst_management.custom_script.monthly_distribution.monthly_distribution.before_save",
+	},
+	"Project Budgeting": {
+		"before_save": "catalyst_management.custom_script.project_budgeting.project_budgeting.before_save",
+		"on_update_after_submit": "catalyst_management.custom_script.project_budgeting.project_budgeting.before_save",
+	},
+	"Purchase Invoice":{
+		"validate": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate",
+
+	},
+	
+	
 	# "Journal Entry": {
 	# 	"before_save": "catalyst_management.custom_script.journal_entry.journal_entry.before_save",
 	# }
