@@ -8,7 +8,7 @@ frappe.query_reports["Project Amounts Breakdown"] = {
 			"fieldname": "document",
 			"label": __("Doctype"),
 			"fieldtype": "Select",
-			"options": ["", "Journal Entry", "Purchase Invoice", "Expense Claim"],
+			"options": ["", "Journal Entry", "Purchase Invoice", "Expense Claim", "Sales Invoice"],
 			"width": 100,
 			"reqd": 0,
 		},

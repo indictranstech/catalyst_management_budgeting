@@ -217,6 +217,29 @@ def make_data():
 					left join `tabPurchase Invoice` pi on pii.parent = pi.name
 					where  pii.docstatus = 1 and pii.project_for_budget IS NOT NULL
 				""",as_dict=1)
+
+	# Sales Invoice
+
+	si_docs =  frappe.db.sql(f""" 
+					select
+						sii.project_for_budget, 
+						sii.project_budget, 
+						sii.budget_account_head, 
+						sii.amount, 
+						sii.modified, 
+						sii.parent, 
+						sii.parenttype, 
+						sii.docstatus,
+						sii.income_account as coa_from_transaction,
+						sii.cost_center,
+						si.posting_date,
+
+						"Customer" as party_type,
+						si.customer as party
+					from `tabSales Invoice Item` sii
+					left join `tabSales Invoice` si on sii.parent = si.name
+					where  sii.docstatus = 1 and sii.project_for_budget IS NOT NULL
+				""",as_dict=1)			
 	
 	ec_docs =  frappe.db.sql(f""" 
 
@@ -264,6 +287,14 @@ def make_data():
 						where  jea.docstatus = 1 and jea.project_for_budget IS NOT NULL  order by jea.project_for_budget
 
 				""",as_dict=1)
+
+
+	for i in si_docs:
+		if i.project_for_budget and i.docstatus == 1:
+			i.coa = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))
+			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'parent_budget_account_head'))
+			data_.append(i)			
 	
 	for i in pi_docs:
 		if i.project_for_budget and i.docstatus == 1:
@@ -271,7 +302,7 @@ def make_data():
 			i.pdm = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'name'))
 			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'parent_budget_account_head'))
 			data_.append(i)
-
+    
 	for i in ec_docs:
 		if i.project_for_budget and i.docstatus == 1:
 			i.coa  = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head':i.budget_account_head}, 'chart_of_account_head'))

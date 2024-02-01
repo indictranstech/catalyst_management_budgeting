@@ -193,14 +193,22 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 	We take care of conditions for date, project and budget_account_head
 	'''
 	# for actual
+	si_total = 0
 	pi_total = 0
 	ec_total = 0
 	je_total = 0
 
 	# for date range
+	month_si_total = 0
 	month_pi_total = 0
 	month_ec_total = 0
 	month_je_total = 0
+
+	si_amount = frappe.get_all('Sales Invoice Item', filters={
+		"project_for_budget": project,
+		"budget_account_head": head,
+		"docstatus": 1
+	}, fields=["project_for_budget", "budget_account_head", "amount", "modified", "parent"])
 
 	pi_amount = frappe.get_all('Purchase Invoice Item', filters={
 		"project_for_budget": project,
@@ -218,6 +226,14 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 		"budget_account_head": head,
 		"docstatus": 1
 	}, fields=["project_for_budget", "budget_account_head", "debit_in_account_currency", "modified","parent"])
+
+	for i in si_amount:
+		si_doc = frappe.get_doc('Sales Invoice', i['parent'])
+		posting_date = si_doc.posting_date
+		if start_date <= posting_date <= end_date:
+			si_total = si_total + i.amount
+		if month_start <= posting_date <= month_end:
+			month_si_total = month_si_total + i.amount
 
 	for i in pi_amount:
 		pi_doc = frappe.get_doc('Purchase Invoice', i['parent'])
@@ -246,7 +262,7 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 			if month_start <= posting_date <= month_end:
 				i["amount"] = i["debit_in_account_currency"]
 				month_je_total = month_je_total + i.amount
-	return [pi_total + ec_total + je_total,month_pi_total + month_ec_total + month_je_total]
+	return [si_total + pi_total + ec_total + je_total,month_si_total + month_pi_total + month_ec_total + month_je_total]
 
 
 def get_month_names_and_Selected_Period_over_all_percenatage(monthly_distribution,start_date, end_date):
