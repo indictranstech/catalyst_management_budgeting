@@ -9,3 +9,12 @@ def before_save(doc, methode):
     #         account.custom_member_type = i.custom_party_type
     #         account.custom_member = i.custom_party
            
+
+def validate(doc, method):
+    if doc.workflow_state:
+        if (doc.workflow_state == 'Send For Review'):
+            doc.custom_prepared_on = doc.modified
+        elif (doc.workflow_state == 'Send For Approval'):
+            doc.custom_reviewed_on = doc.modified
+        elif (doc. workflow_state == 'Approved'):
+            doc.custom_approved_on = doc.modified
