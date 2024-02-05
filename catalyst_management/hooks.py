@@ -134,6 +134,27 @@ doc_events = {
 		"validate": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate",
 
 	},
+	"Purchase Order":{
+		"validate": "catalyst_management.custom_script.purchase_order.purchase_order.validate",
+	},
+	"Expense Claim":{
+		"validate": "catalyst_management.custom_script.expense_claim.expense_claim.validate",
+	},
+	"Sales Order":{
+		"validate": "catalyst_management.custom_script.sales_order.sales_order.validate",
+	},
+	"Sales Invoice":{
+		"validate": "catalyst_management.custom_script.sales_invoice.sales_invoice.validate",
+	},
+	"Payment Entry":{
+		"validate": "catalyst_management.custom_script.payment_entry.payment_entry.validate",
+	},
+	"Journal Entry":{
+		"validate": "catalyst_management.custom_script.journal_entry.journal_entry.validate",
+	},
+	"Employee Advance":{
+		"validate": "catalyst_management.custom_script.employee_advance.employee_advance.validate",
+	},
 	
 	
 	# "Journal Entry": {
