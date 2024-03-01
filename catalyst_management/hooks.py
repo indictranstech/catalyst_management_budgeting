@@ -36,7 +36,8 @@ doctype_js = {
         "Expense Claim": "custom_script/expense_claim/expense_claim.js",
         "Payroll Entry" : "custom_script/payroll_entry/payroll_entry.js",
         "Journal Entry" : "custom_script/journal_entry/journal_entry.js",
-        "Sales Order" : "custom_script/sales_order/sales_order.js"
+        "Sales Order" : "custom_script/sales_order/sales_order.js",
+		"Employee Advance" : "custom_script/employee_advance/employee_advance.js"
 
 
 	}
@@ -127,13 +128,20 @@ doc_events = {
 		"before_save": "catalyst_management.custom_script.monthly_distribution.monthly_distribution.before_save",
 	},
 	"Project Budgeting": {
-		"before_save": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save"],
-		"on_submit": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save"],
+		"before_save": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save",
+		"catalyst_management.custom_script.project_budgeting.project_budgeting.calculating_total_actual_amount"],
+		"on_submit": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save",
+		"catalyst_management.custom_script.project_budgeting.project_budgeting.calculating_total_actual_amount"],
 		"on_update_after_submit": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save",
-		"catalyst_management.custom_script.project_budgeting.project_budgeting.update_grand_total"]
+		"catalyst_management.custom_script.project_budgeting.project_budgeting.calculating_total_actual_amount"]
 		},
 	"Purchase Invoice":{
 		"validate": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate",
+		"on_update_after_submit": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_chart_of_account",
+		"before_save": ["catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_chart_of_account",
+		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate_posting_date",
+		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_items_amount"],
+		"on_submit": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_total_actual_amount"
 
 	},
 	"Purchase Order":{
@@ -141,12 +149,23 @@ doc_events = {
 	},
 	"Expense Claim":{
 		"validate": "catalyst_management.custom_script.expense_claim.expense_claim.validate",
+		"on_update_after_submit": "catalyst_management.custom_script.expense_claim.expense_claim.update_chart_of_account",
+		"before_save": ["catalyst_management.custom_script.expense_claim.expense_claim.update_chart_of_account",
+		"catalyst_management.custom_script.expense_claim.expense_claim.validate_posting_date",
+		"catalyst_management.custom_script.expense_claim.expense_claim.calculate_items_amount",
+		],
+		"on_submit":["catalyst_management.custom_script.expense_claim.expense_claim.update_project_budget_actual_amount"]
 	},
 	"Sales Order":{
 		"validate": "catalyst_management.custom_script.sales_order.sales_order.validate",
 	},
 	"Sales Invoice":{
 		"validate": "catalyst_management.custom_script.sales_invoice.sales_invoice.validate",
+		"on_update_after_submit": "catalyst_management.custom_script.sales_invoice.sales_invoice.update_chart_of_account",
+		"before_save": ["catalyst_management.custom_script.sales_invoice.sales_invoice.update_chart_of_account",
+		"catalyst_management.custom_script.sales_invoice.sales_invoice.validate_posting_date",
+		"catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_items_amount"],
+		"on_submit": "catalyst_management.custom_script.sales_invoice.sales_invoice.update_project_budget_actual_amount"
 	},
 	"Payment Entry":{
 		"validate": "catalyst_management.custom_script.payment_entry.payment_entry.validate",
@@ -156,12 +175,15 @@ doc_events = {
 	},
 	"Employee Advance":{
 		"validate": "catalyst_management.custom_script.employee_advance.employee_advance.validate",
+		"before_save": "catalyst_management.custom_script.employee_advance.employee_advance.validate_posting_date",
 	},
 	
 	
-	# "Journal Entry": {
-	# 	"before_save": "catalyst_management.custom_script.journal_entry.journal_entry.before_save",
-	# }
+	"Journal Entry": {
+		"before_save": ["catalyst_management.custom_script.journal_entry.journal_entry.calculate_items_amount",
+		"catalyst_management.custom_script.journal_entry.journal_entry.validate_posting_date"],
+		"on_submit": "catalyst_management.custom_script.journal_entry.journal_entry.update_total_actual_amount",
+	}
 }
 
 # Scheduled Tasks
