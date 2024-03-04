@@ -30,7 +30,7 @@ def validate_posting_date(doc, method):
     for item in doc.items:
         contract_details = frappe.db.get_list('Contract', {'party_name': doc.customer, 'custom_project': item.project}, ['end_date','name'])
         for i in contract_details:
-            if str(i.end_date) < doc.posting_date:
+            if str(i.end_date) < str(doc.posting_date):
                 if not doc.custom_reason:
                     ms =f'''
                     <a href="{frappe.utils.get_url_to_form('Contract', i.name)}">{i.name}</a>
