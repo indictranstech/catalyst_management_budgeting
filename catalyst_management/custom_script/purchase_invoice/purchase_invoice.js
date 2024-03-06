@@ -15,6 +15,12 @@ frappe.ui.form.on("Purchase Invoice Item", "project_for_budget", function(frm, c
     frm.refresh_field('items');
 });
 
+frappe.ui.form.on("Purchase Invoice Item", "project", function(frm, cdt, cdn) {
+    var d = locals[cdt][cdn];
+    d.project_budget = d.project_for_budget;
+    frm.refresh_field('items');
+});
+
 // Reset budget_account_head field when project_budget field is changed
 frappe.ui.form.on("Purchase Invoice Item", "project_budget", function(frm, cdt, cdn) {
     var d = locals[cdt][cdn];
@@ -66,28 +72,7 @@ frappe.ui.form.on('Purchase Invoice Item', {
                 });
             });
         }
-    },
-    project_budget: function(frm, cdt, cdn) {
-        var child = locals[cdt][cdn];
-        if (child.project_for_budget) {
-            frappe.db.get_list('Project Budgeting', {
-                fields: ['custom_grand_total', 'custom_total_actual_amount'],
-                filters: {
-                    'name': child.project_for_budget
-                },
-            }).then(records => {
-                $.each(records, function(i, j) {
-                    var total = frm.doc.total + j.custom_total_actual_amount;
-                    frm.set_value('custom_total_amount_from_invoice',frm.doc.total );
-                    frm.set_value('custom_total_amount_from_project_budget',j.custom_total_actual_amount);
-                    frm.set_value('custom_total_amount', total);
-                });
-            }).catch(err => {
-                console.error(err);
-            });
-        }
-    },
-   
+    }
 });
 
 frappe.ui.form.on('Purchase Invoice', {

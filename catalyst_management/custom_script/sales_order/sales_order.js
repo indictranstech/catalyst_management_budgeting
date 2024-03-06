@@ -16,6 +16,12 @@ frappe.ui.form.on("Sales Order Item", "project_for_budget", function(frm, cdt, c
     frm.refresh_field('items');
 });
 
+frappe.ui.form.on("Sales Order Item", "project", function(frm, cdt, cdn) {
+    var d = locals[cdt][cdn];
+    d.project_budget = d.project_for_budget;
+    frm.refresh_field('items');
+});
+
 // Reset budget_account_head field when project_budget field is changed
 frappe.ui.form.on("Sales Order Item", "project_budget", function(frm, cdt, cdn) {
     var d = locals[cdt][cdn];

@@ -139,7 +139,7 @@
    "description": null,
    "docstatus": 0,
    "dt": "Expense Claim Detail",
-   "fetch_from": "project.name",
+   "fetch_from": "",
    "fetch_if_empty": 0,
    "fieldname": "project_budget",
    "fieldtype": "Link",

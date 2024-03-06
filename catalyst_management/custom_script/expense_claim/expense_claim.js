@@ -30,6 +30,12 @@ frappe.ui.form.on("Expense Claim Detail", "project_for_budget", function(frm, cd
     frm.refresh_field('expenses');
 });
 
+frappe.ui.form.on("Expense Claim Detail", "project", function(frm, cdt, cdn) {
+    var d = locals[cdt][cdn];
+    d.project_budget = d.project_for_budget;
+    frm.refresh_field('expenses');
+});
+
 // Reset budget_account_head field when project_budget field is changed
 frappe.ui.form.on("Expense Claim Detail", "project_budget", function(frm, cdt, cdn) {
     var d = locals[cdt][cdn];

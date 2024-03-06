@@ -16,6 +16,12 @@ frappe.ui.form.on("Journal Entry Account", "project_for_budget", function(frm, c
     frm.refresh_field('accounts');
 });
 
+frappe.ui.form.on("Journal Entry Account", "project", function(frm, cdt, cdn) {
+    var d = locals[cdt][cdn];
+    d.project_budget = d.project_for_budget;
+    frm.refresh_field('accounts');
+});
+
 // Reset budget_account_head field when project_budget field is changed
 // frappe.ui.form.on("Journal Entry Account", "project_budget", function(frm, cdt, cdn) {
 //     var d = locals[cdt][cdn];
