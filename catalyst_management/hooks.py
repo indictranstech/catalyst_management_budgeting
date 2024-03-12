@@ -33,6 +33,7 @@ app_license = "MIT"
 doctype_js = {
         "Sales Invoice" : "custom_script/sales_invoice/sales_invoice.js",
         "Purchase Invoice" : "custom_script/purchase_invoice/purchase_invoice.js",
+		"Purchase Order" : "custom_script/purchase_order/purchase_order.js",
         "Expense Claim": "custom_script/expense_claim/expense_claim.js",
         "Payroll Entry" : "custom_script/payroll_entry/payroll_entry.js",
         "Journal Entry" : "custom_script/journal_entry/journal_entry.js",

@@ -77,4 +77,18 @@ frappe.ui.form.on('Journal Entry', {
     }
 });
 
+frappe.ui.form.on("Journal Entry", {
+    refresh:function(frm){
+        frm.set_query("project","accounts", function(doc, cdt, cdn) {
+			var row = frappe.get_doc(cdt, cdn);
+			return {
+				filters: [
+				    ["Project", "company", "=", frm.doc.company],
+					
+				]
+            }
+          
+    })
+}
+})
 

@@ -131,3 +131,17 @@ frappe.ui.form.on('Expense Claim Detail', {
         });
     }
 });
+frappe.ui.form.on("Expense Claim", {
+    refresh:function(frm){
+        frm.set_query("project","expenses", function(doc, cdt, cdn) {
+			var row = frappe.get_doc(cdt, cdn);
+			return {
+				filters: [
+				    ["Project", "company", "=", frm.doc.company],
+					
+				]
+            }
+          
+    })
+}
+})

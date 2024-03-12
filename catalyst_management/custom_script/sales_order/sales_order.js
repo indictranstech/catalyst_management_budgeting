@@ -54,3 +54,18 @@ cur_frm.fields_dict["items"].grid.get_field("budget_account_head").get_query = f
         ]
     }
 }
+
+frappe.ui.form.on("Sales Order", {
+    refresh:function(frm){
+        frm.set_query("project","items", function(doc, cdt, cdn) {
+			var row = frappe.get_doc(cdt, cdn);
+			return {
+				filters: [
+				    ["Project", "company", "=", frm.doc.company],
+					
+				]
+            }
+          
+    })
+}
+})
