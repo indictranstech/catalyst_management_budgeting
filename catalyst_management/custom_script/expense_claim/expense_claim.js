@@ -109,3 +109,25 @@ frappe.ui.form.on('Expense Claim', {
     })
 }
 });
+
+frappe.ui.form.on('Expense Claim Detail', {
+    budget_account_head(frm) {
+        frappe.call({
+            method: 'catalyst_management.custom_script.expense_claim.expense_claim.update_chart_of_account',
+            args: {
+                doc: frm.doc
+            },
+            callback: function(r) {
+                if (r.message) {
+                    // Loop through each row in the child table
+                    frm.doc.expenses.forEach(function(item) {
+                        // Set the value of the expense_account field for each row
+                        frappe.model.set_value(item.doctype, item.name, 'default_account', r.message);
+                    });
+
+                    refresh_field('expenses');
+                }
+            }
+        });
+    }
+});

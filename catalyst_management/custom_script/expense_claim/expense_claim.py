@@ -6,6 +6,7 @@ from frappe.utils import add_to_date
 from frappe.utils import (
 	now_datetime, getdate, formatdate
 )
+import json
 
 def validate(doc, method):
     if doc.workflow_state:
@@ -17,12 +18,16 @@ def validate(doc, method):
             doc.custom_approved_on = doc.modified
 
     
-def update_chart_of_account(doc, methode):
-    for item in doc.expenses:
-        result= frappe.db.get_all('Budget Account Mapping',{'parent':item.project,'budget_account_head':item.budget_account_head,},['chart_of_account_head'])
-        for i in result:
-            item.default_account = i.chart_of_account_head
-         
+@frappe.whitelist()
+def update_chart_of_account(doc):
+    doc = json.loads(doc)
+    for d in doc.get('expenses'):
+        result = frappe.db.get_all('Budget Account Mapping', {'parent':d.get('project'),'budget_account_head':d.get('budget_account_head')}, ['chart_of_account_head'])
+        result_dict = {}
+        for d in result:
+            for key, value in d.items():
+                result_dict[key] = value
+    return result_dict.get('chart_of_account_head')         
 
 # Posting date validate according to contract end date 
 

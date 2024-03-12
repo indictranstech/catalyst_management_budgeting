@@ -54,26 +54,30 @@ cur_frm.fields_dict["items"].grid.get_field("budget_account_head").get_query = f
     }
 }
 
-
-
 frappe.ui.form.on('Purchase Invoice Item', {
-    budget_account_head: function(frm, cdt, cdn) {
-        var child = locals[cdt][cdn];
-        if (child.project) {
-            frappe.db.get_list('Account', {
-                fields: ['name'],
-                filters: {
-                    'account_type': 'Cost of Goods Sold',
-                    'company': frm.doc.company
-                },
-            }).then(records => {
-                $.each(records, function(j, s) {
-                    frappe.model.set_value(cdt, cdn, 'expense_account', s.name);
-                });
-            });
-        }
+    budget_account_head(frm) {
+        frappe.call({
+            method: 'catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_chart_of_account',
+            args: {
+                doc: frm.doc
+            },
+            callback: function(r) {
+                if (r.message) {
+                    // Loop through each row in the child table
+                    frm.doc.items.forEach(function(item) {
+                        // Set the value of the expense_account field for each row
+                        frappe.model.set_value(item.doctype, item.name, 'expense_account', r.message);
+                    });
+
+                    refresh_field('items');
+                }
+            }
+        });
     }
 });
+
+
+
 
 frappe.ui.form.on('Purchase Invoice', {
     before_save(frm) {
