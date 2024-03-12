@@ -137,11 +137,9 @@ doc_events = {
 		},
 	"Purchase Invoice":{
 		"validate": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate",
-		"on_update_after_submit": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_chart_of_account",
-		"before_save": ["catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_chart_of_account",
-		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate_posting_date",
+		"before_save": ["catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate_posting_date",
 		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_items_amount"],
-		"on_submit": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_total_actual_amount"
+		"on_submit": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_total_actual_amount",
 
 	},
 	"Purchase Order":{
@@ -149,9 +147,7 @@ doc_events = {
 	},
 	"Expense Claim":{
 		"validate": "catalyst_management.custom_script.expense_claim.expense_claim.validate",
-		"on_update_after_submit": "catalyst_management.custom_script.expense_claim.expense_claim.update_chart_of_account",
-		"before_save": ["catalyst_management.custom_script.expense_claim.expense_claim.update_chart_of_account",
-		"catalyst_management.custom_script.expense_claim.expense_claim.validate_posting_date",
+		"before_save": ["catalyst_management.custom_script.expense_claim.expense_claim.validate_posting_date",
 		"catalyst_management.custom_script.expense_claim.expense_claim.calculate_items_amount",
 		],
 		"on_submit":["catalyst_management.custom_script.expense_claim.expense_claim.update_project_budget_actual_amount"]
@@ -161,9 +157,7 @@ doc_events = {
 	},
 	"Sales Invoice":{
 		"validate": "catalyst_management.custom_script.sales_invoice.sales_invoice.validate",
-		"on_update_after_submit": "catalyst_management.custom_script.sales_invoice.sales_invoice.update_chart_of_account",
-		"before_save": ["catalyst_management.custom_script.sales_invoice.sales_invoice.update_chart_of_account",
-		"catalyst_management.custom_script.sales_invoice.sales_invoice.validate_posting_date",
+		"before_save": ["catalyst_management.custom_script.sales_invoice.sales_invoice.validate_posting_date",
 		"catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_items_amount"],
 		"on_submit": "catalyst_management.custom_script.sales_invoice.sales_invoice.update_project_budget_actual_amount"
 	},
