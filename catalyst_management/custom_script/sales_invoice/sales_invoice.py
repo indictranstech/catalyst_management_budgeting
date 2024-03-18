@@ -59,4 +59,48 @@ def update_project_budget_actual_amount(doc, method):
         project_budgeting_amount = frappe.db.get_all("Project Budgeting", filters={"name": item.project_for_budget}, fields=["custom_grand_total","custom_total_actual_amount","name"])
         for pb in project_budgeting_amount:
             frappe.db.set_value("Project Budgeting", pb["name"] ,"custom_total_actual_amount" , doc.custom_total_amount)
-            frappe.db.commit()                
+            frappe.db.commit()  
+
+def calculate_item_details(self, method):
+    item_details = {}
+
+    # Grouping items by item code and HSN code and calculating total amount
+    for item in self.items:
+        key = (item.project_budget,item.budget_account_head)
+        if key in item_details:
+            item_details[key] += item.amount
+        else:
+            item_details[key] = item.amount
+
+    # Clear existing item details
+    self.set("custom_item_details", [])
+    # Adding grouped item details to the new child table
+    for key, amount in item_details.items():
+        project_budget,budget_account_head = key
+        self.append("custom_item_details", {
+            "current_invoice_amount": amount,
+            "project_budget": project_budget,
+            "budget_account_head":budget_account_head,
+        })
+
+def calculate_budget_account_head_amount_actual(self, method):
+    if self.custom_item_details:
+        for item in self.custom_item_details:
+            project_budgeting_amount = frappe.db.get_all("Budget Account Mapping", filters={"parent": item.project_budget, "budget_account_head":item.budget_account_head}, fields=["custom_total_amount", "amount", "parent"])
+            for pb in project_budgeting_amount:
+                item.total_budget_account_head_amount_actual = pb.custom_total_amount
+                item.total_consolidated_budget_account_head_amount = item.current_invoice_amount + pb.custom_total_amount
+                if pb.amount < item.total_consolidated_budget_account_head_amount:
+                    ms =f'''
+                    <a href="{frappe.utils.get_url_to_form('Project Budgeting', pb.parent)}">{pb.parent}</a>
+                    '''
+                    frappe.throw(frappe._("Total Consolidated Budget Account Head Amount is greater than Budget Account Mapping Amount. If needed kindly access the Project Budget here - {0}.").format(ms))
+
+def update_budget_account_mapping_amount(self, method):
+    if self.custom_item_details:
+        for item in self.custom_item_details: 
+            project_budgeting_amount = frappe.db.get_all("Budget Account Mapping", filters={"parent": item.project_budget, "budget_account_head":item.budget_account_head}, fields=["custom_total_amount", "name"])
+            for pb in project_budgeting_amount:
+                frappe.db.set_value("Budget Account Mapping", pb["name"] ,"custom_total_amount" , item.total_consolidated_budget_account_head_amount)
+                frappe.db.commit()                   
+
