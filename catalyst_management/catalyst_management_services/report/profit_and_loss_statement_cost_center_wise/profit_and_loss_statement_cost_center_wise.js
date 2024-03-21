@@ -18,14 +18,24 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 	erpnext.utils.add_dimensions('Profit and Loss Statement Cost Center Wise', 10);
 
 	frappe.query_reports["Profit and Loss Statement Cost Center Wise"]["filters"].push(
+		// {
+		// 	"fieldname": "project",
+		// 	"label": __("Project"),
+		// 	"fieldtype": "MultiSelectList",
+		// 	get_data: function(txt) {
+		// 		return frappe.db.get_link_options('Project', txt);
+		// 	}
+		// },
 		{
-			"fieldname": "project",
-			"label": __("Project"),
-			"fieldtype": "MultiSelectList",
+			"fieldname": "cs",
+			"label": __("Cost center"),
+				"fieldtype": "MultiSelectList",
 			get_data: function(txt) {
-				return frappe.db.get_link_options('Project', txt);
+				return frappe.db.get_link_options('Cost Center', txt);
 			}
-		},
+		
+			},
+
 		{
 			"fieldname": "all_cost_center_child",
 			"label": __("All Cost Center Child"),
@@ -33,6 +43,8 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 			onclick: function() {
 	
 				frappe.query_report.set_filter_value('cost_center', [])
+				frappe.query_report.set_filter_value('allpc', [])
+				frappe.query_report.set_filter_value('allcc', [])
 				var new_filter1_value = []
 				frappe.call({
 					method: 'frappe.client.get_list',
@@ -49,6 +61,8 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 								new_filter1_value = r.message.map(obj => obj.name)
 								console.log(new_filter1_value)
 								frappe.query_report.set_filter_value('cost_center', new_filter1_value)
+								frappe.query_report.set_filter_value('allpc', 0)
+								frappe.query_report.set_filter_value('allcc', 1)
 							}
 						}
 					}
@@ -63,6 +77,8 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 			onclick: function() {
 	
 				frappe.query_report.set_filter_value('cost_center', [])
+				frappe.query_report.set_filter_value('allpc', [])
+				frappe.query_report.set_filter_value('allcc', [])
 				var new_filter1_value = []
 				frappe.call({
 					method: 'frappe.client.get_list',
@@ -80,6 +96,9 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 								new_filter1_value = r.message.map(obj => obj.name)
 								console.log(new_filter1_value)
 								frappe.query_report.set_filter_value('cost_center', new_filter1_value)
+								frappe.query_report.set_filter_value('allpc', 1)
+								frappe.query_report.set_filter_value('allcc', 0)
+								
 							}
 						}
 					}
@@ -101,42 +120,20 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 			"read_only":1,
 			"hidden":1,
 		},
+		{
+			"fieldname": "allpc",
+			"label": __("All Parent Cost Center"),
+			"fieldtype": "Check",
+			"hidden":1,
+		},
+		{
+			"fieldname": "allcc",
+			"label": __("All Child Cost Center"),
+			"fieldtype": "Check",
+			"hidden":1,
+		},
 	);
 });
 
 
-
-// frappe.require("assets/erpnext/js/financial_statements.js", function() {
-
-
-	// frappe.query_reports["Profit and Loss Statement Cost Center Wise"] = $.extend({},
-	// 	erpnext.financial_statements);
-
-		// erpnext.utils.add_dimensions('Profit and Loss Statement Cost Center Wise', 10);
-
-		// frappe.query_reports["Profit and Loss Statement Cost Center Wise"] = ["filters"].push(
-		// 	{
-		// 		"fieldname": "project",
-		// 		"label": __("Project"),
-		// 		"fieldtype": "MultiSelectList",
-		// 		get_data: function(txt) {
-		// 			return frappe.db.get_link_options('Project', txt);
-		// 		}
-		// 	},
-		// 	{
-		// 		"fieldname": "include_default_book_entries",
-		// 		"label": __("Include Default Book Entries"),
-		// 		"fieldtype": "Check",
-		// 		"default": 1
-		// 	},
-		// 	{
-		// 		"fieldname": "crrr",
-		// 		"label": __("crrr"),
-		// 		"fieldtype": "Check",
-		// 		"default": 1,
-		// 		"read_only":1,
-		// 		"hidden":1,
-		// 	},
-		// );
-// });
 

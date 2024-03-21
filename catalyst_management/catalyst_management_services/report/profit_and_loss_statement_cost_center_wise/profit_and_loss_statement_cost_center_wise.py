@@ -100,16 +100,64 @@ def execute(filters=None):
 					pass
 
 
-	for j in filters.get("cost_center"):
-		for i in filtered_list:
-			columns.append(
-				{
-					"fieldname": f"{j.replace('','_')}_{i}",
-					"label": f"<b> {j} {i} </b>",
-					"datatype": "Currency",
-					"options": "currency",
-				}
-			)
+	# for j in filters.get("cost_center"):
+	# 	for i in filtered_list:
+	# 		columns.append(
+	# 			{
+	# 				"fieldname": f"{j.replace('','_')}_{i}",
+	# 				"label": f"<b> {j} {i} </b>",
+	# 				"datatype": "Currency",
+	# 				"options": "currency",
+	# 			}
+	# 		)
+
+	if filters.get("periodicity") == 'Yearly':
+		print()
+		for j in filters.get("cost_center"):
+			p = frappe.db.get_value("Cost Center", {"name":j,"is_group":1} ,"name")
+			pn = frappe.db.get_value("Cost Center", {"name":j,"is_group":0} ,"name")
+			for i in filtered_list:
+				if p == j and filters.get("allpc") == 1:
+					columns.append(
+						{
+								"fieldname": f"{j.replace('','_')}_{i}",
+								"label": f"<b> {j}</b>",
+								"datatype": "Currency",
+								"options": "currency",
+						}
+					)
+				if pn == j and filters.get("allcc") == 1:
+					columns.append(
+						{
+								"fieldname": f"{j.replace('','_')}_{i}",
+								"label": f"<b> {j}</b>",
+								"datatype": "Currency",
+								"options": "currency",
+						}
+					)
+	if filters.get("periodicity") != 'Yearly':
+		for j in filters.get("cost_center"):
+			p = frappe.db.get_value("Cost Center", {"name":j,"is_group":1} ,"name")
+			pn = frappe.db.get_value("Cost Center", {"name":j,"is_group":0} ,"name")
+			for i in filtered_list:
+				if p == j and filters.get("allpc") == 1:
+					columns.append(
+						{
+								"fieldname": f"{j.replace('','_')}_{i}",
+								"label": f"<b> {j} {i} </b>",
+								"datatype": "Currency",
+								"options": "currency",
+						}
+					)
+				if pn == j and filters.get("allcc") == 1:
+					columns.append(
+						{
+								"fieldname": f"{j.replace('','_')}_{i}",
+								"label": f"<b> {j} {i} </b>",
+								"datatype": "Currency",
+								"options": "currency",
+						}
+					)				
 
 	chart = get_chart_data(filters, columns, income, expense, net_profit_loss)
 
