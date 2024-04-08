@@ -69,46 +69,46 @@ cur_frm.fields_dict["expenses"].grid.get_field("budget_account_head").get_query 
     }
 }
 
-frappe.ui.form.on('Expense Claim', {
-    before_save(frm) {
-        frm.doc.expenses.forEach(item => {
-            frappe.db.get_list('Contract', {
-            fields: ['end_date'],
-            filters: {party_name: frm.doc.employee, custom_project: item.project}
-        }).then(records => {
-            $.each(records, function(i, r) {
-                if (r.end_date < frm.doc.date) {
-                    frm.set_df_property("custom_reason","hidden",0)
-                }
-            });
-        });
-        })
-    },
-    refresh(frm){
-        if (frm.doc.custom_reason != null){
-            frm.set_df_property("custom_reason","hidden",0)
-        }
+// frappe.ui.form.on('Expense Claim', {
+//     before_save(frm) {
+//         frm.doc.expenses.forEach(item => {
+//             frappe.db.get_list('Contract', {
+//             fields: ['end_date'],
+//             filters: {party_name: frm.doc.employee, custom_project: item.project}
+//         }).then(records => {
+//             $.each(records, function(i, r) {
+//                 if (r.end_date < frm.doc.date) {
+//                     frm.set_df_property("custom_reason","hidden",0)
+//                 }
+//             });
+//         });
+//         })
+//     },
+//     refresh(frm){
+//         if (frm.doc.custom_reason != null){
+//             frm.set_df_property("custom_reason","hidden",0)
+//         }
 
-    }
-});
-frappe.ui.form.on('Expense Claim', {
-    before_save(frm) {
-        frm.doc.expenses.forEach(item => {
-        frappe.db.get_list('Project Budgeting', {
-        fields: ['custom_total_actual_amount'],
-        filters: {name: item.project
-        },
-    }).then(records => {
-        $.each(records, function(i, j) {
-            console.log("j.custom_total_actual_amount ",j.custom_grand_total )
-            frm.set_value('custom_total_amount_from_invoice', frm.doc.total_sanctioned_amount);
-            frm.set_value('custom_total_amount_from_project_budget', j.custom_total_actual_amount);
-            frm.set_value('custom_total_amount',frm.doc.total_sanctioned_amount + j.custom_total_actual_amount  );
-    });
-    })
-    })
-}
-});
+//     }
+// });
+// frappe.ui.form.on('Expense Claim', {
+//     before_save(frm) {
+//         frm.doc.expenses.forEach(item => {
+//         frappe.db.get_list('Project Budgeting', {
+//         fields: ['custom_total_actual_amount'],
+//         filters: {name: item.project
+//         },
+//     }).then(records => {
+//         $.each(records, function(i, j) {
+//             console.log("j.custom_total_actual_amount ",j.custom_grand_total )
+//             frm.set_value('custom_total_amount_from_invoice', frm.doc.total_sanctioned_amount);
+//             frm.set_value('custom_total_amount_from_project_budget', j.custom_total_actual_amount);
+//             frm.set_value('custom_total_amount',frm.doc.total_sanctioned_amount + j.custom_total_actual_amount  );
+//     });
+//     })
+//     })
+// }
+// });
 
 frappe.ui.form.on('Expense Claim Detail', {
     budget_account_head(frm) {

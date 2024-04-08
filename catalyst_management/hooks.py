@@ -139,12 +139,12 @@ doc_events = {
 		},
 	"Purchase Invoice":{
 		"validate": "catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate",
-		"before_save": ["catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate_posting_date",
-		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_items_amount",
-		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_item_details",
-		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_budget_account_head_amount_actual"],
-		"on_submit": ["catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_total_actual_amount",
-		"catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_budget_account_mapping_amount",]
+		# "before_save": ["catalyst_management.custom_script.purchase_invoice.purchase_invoice.validate_posting_date",
+		# "catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_items_amount",
+		# "catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_item_details",
+		# "catalyst_management.custom_script.purchase_invoice.purchase_invoice.calculate_budget_account_head_amount_actual"],
+		# "on_submit": ["catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_total_actual_amount",
+		# "catalyst_management.custom_script.purchase_invoice.purchase_invoice.update_budget_account_mapping_amount",]
 
 	},
 	"Purchase Order":{
@@ -152,25 +152,25 @@ doc_events = {
 	},
 	"Expense Claim":{
 		"validate": "catalyst_management.custom_script.expense_claim.expense_claim.validate",
-		"before_save": ["catalyst_management.custom_script.expense_claim.expense_claim.validate_posting_date",
-		"catalyst_management.custom_script.expense_claim.expense_claim.calculate_items_amount",
-		"catalyst_management.custom_script.expense_claim.expense_claim.calculate_item_details",
-		"catalyst_management.custom_script.expense_claim.expense_claim.calculate_budget_account_head_amount_actual",
-		],
-		"on_submit":["catalyst_management.custom_script.expense_claim.expense_claim.update_project_budget_actual_amount",
-		"catalyst_management.custom_script.expense_claim.expense_claim.update_budget_account_mapping_amount"]
+		# "before_save": ["catalyst_management.custom_script.expense_claim.expense_claim.validate_posting_date",
+		# "catalyst_management.custom_script.expense_claim.expense_claim.calculate_items_amount",
+		# "catalyst_management.custom_script.expense_claim.expense_claim.calculate_item_details",
+		# "catalyst_management.custom_script.expense_claim.expense_claim.calculate_budget_account_head_amount_actual",
+		# ],
+		# "on_submit":["catalyst_management.custom_script.expense_claim.expense_claim.update_project_budget_actual_amount",
+		# "catalyst_management.custom_script.expense_claim.expense_claim.update_budget_account_mapping_amount"]
 	},
 	"Sales Order":{
 		"validate": "catalyst_management.custom_script.sales_order.sales_order.validate",
 	},
 	"Sales Invoice":{
 		"validate": "catalyst_management.custom_script.sales_invoice.sales_invoice.validate",
-		"before_save": ["catalyst_management.custom_script.sales_invoice.sales_invoice.validate_posting_date",
-		"catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_items_amount",
-		"catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_item_details",
-		"catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_budget_account_head_amount_actual"],
-		"on_submit": ["catalyst_management.custom_script.sales_invoice.sales_invoice.update_project_budget_actual_amount",
-		"catalyst_management.custom_script.sales_invoice.sales_invoice.update_budget_account_mapping_amount"]
+		# "before_save": ["catalyst_management.custom_script.sales_invoice.sales_invoice.validate_posting_date",
+		# "catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_items_amount",
+		# "catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_item_details",
+		# "catalyst_management.custom_script.sales_invoice.sales_invoice.calculate_budget_account_head_amount_actual"],
+		# "on_submit": ["catalyst_management.custom_script.sales_invoice.sales_invoice.update_project_budget_actual_amount",
+		# "catalyst_management.custom_script.sales_invoice.sales_invoice.update_budget_account_mapping_amount"]
 	},
 	"Payment Entry":{
 		"validate": "catalyst_management.custom_script.payment_entry.payment_entry.validate",
@@ -185,12 +185,13 @@ doc_events = {
 	
 	
 	"Journal Entry": {
-		"before_save": ["catalyst_management.custom_script.journal_entry.journal_entry.calculate_items_amount",
-		"catalyst_management.custom_script.journal_entry.journal_entry.validate_posting_date",
-		"catalyst_management.custom_script.journal_entry.journal_entry.calculate_item_details",
-		"catalyst_management.custom_script.journal_entry.journal_entry.calculate_budget_account_head_amount_actual"],
-		"on_submit": ["catalyst_management.custom_script.journal_entry.journal_entry.update_total_actual_amount",
-		"catalyst_management.custom_script.journal_entry.journal_entry.update_budget_account_mapping_amount"]
+		"validate": "catalyst_management.custom_script.journal_entry.journal_entry.validate",
+		# "before_save": ["catalyst_management.custom_script.journal_entry.journal_entry.calculate_items_amount",
+		# "catalyst_management.custom_script.journal_entry.journal_entry.validate_posting_date",
+		# "catalyst_management.custom_script.journal_entry.journal_entry.calculate_item_details",
+		# "catalyst_management.custom_script.journal_entry.journal_entry.calculate_budget_account_head_amount_actual"],
+		# "on_submit": ["catalyst_management.custom_script.journal_entry.journal_entry.update_total_actual_amount",
+		# "catalyst_management.custom_script.journal_entry.journal_entry.update_budget_account_mapping_amount"]
 	}
 }
 
