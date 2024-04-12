@@ -62,6 +62,7 @@ frappe.ui.form.on("Sales Order", {
 			return {
 				filters: [
 				    ["Project", "company", "=", frm.doc.company],
+                    ["Project", "status", "=", 'Open'],
 					
 				]
             }

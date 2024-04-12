@@ -5,6 +5,7 @@ frappe.ui.form.on("Purchase Order", {
 			return {
 				filters: [
 				    ["Project", "company", "=", frm.doc.company],
+					["Project", "status", "=", 'Open'],
 					
 				]
             }

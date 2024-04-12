@@ -5,6 +5,7 @@ frappe.ui.form.on('Payment Entry', {
 			return {
 				filters: [
 				    ["Project", "company", "=", frm.doc.company],
+					["Project", "status", "=", 'Open'],
 					
 				]
             }

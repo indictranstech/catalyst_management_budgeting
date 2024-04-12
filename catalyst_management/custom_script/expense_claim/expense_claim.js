@@ -138,6 +138,7 @@ frappe.ui.form.on("Expense Claim", {
 			return {
 				filters: [
 				    ["Project", "company", "=", frm.doc.company],
+                    ["Project", "status", "=", 'Open'],
 					
 				]
             }

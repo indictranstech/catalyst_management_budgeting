@@ -28,6 +28,7 @@ frappe.ui.form.on("Employee Advance", {
 			return {
 				filters: [
 				    ["Project", "company", "=", frm.doc.company],
+                    ["Project", "status", "=", 'Open'],
 					
 				]
             }

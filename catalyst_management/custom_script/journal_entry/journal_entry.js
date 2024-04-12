@@ -84,6 +84,7 @@ frappe.ui.form.on("Journal Entry", {
 			return {
 				filters: [
 				    ["Project", "company", "=", frm.doc.company],
+                    ["Project", "status", "=", 'Open'],
 					
 				]
             }
