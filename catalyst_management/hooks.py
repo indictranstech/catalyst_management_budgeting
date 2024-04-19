@@ -131,8 +131,8 @@ doc_events = {
 	},
 	"Project Budgeting": {
 		"before_save":"catalyst_management.custom_script.project_budgeting.project_budgeting.before_save",
-		"on_submit": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save",
-		"catalyst_management.custom_script.project_budgeting.project_budgeting.calculating_total_actual_amount"],
+		"on_submit": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save_on_update",
+		"catalyst_management.custom_script.project_budgeting.project_budgeting.calculating_total_actual_amount_on_update"],
 		"on_update_after_submit": ["catalyst_management.custom_script.project_budgeting.project_budgeting.before_save_on_update",
 		"catalyst_management.custom_script.project_budgeting.project_budgeting.calculating_total_actual_amount_on_update"]
 		},
