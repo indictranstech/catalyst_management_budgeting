@@ -226,13 +226,12 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 		"budget_account_head": head,
 		"docstatus": 1
 	}, fields=["project_for_budget", "budget_account_head", "debit_in_account_currency", "modified","parent"])
-
 	for i in si_amount:
 		si_doc = frappe.get_doc('Sales Invoice', i['parent'])
 		posting_date = si_doc.posting_date
 		if start_date <= posting_date <= end_date:
 			si_total = si_total + i.amount
-		if month_start <= posting_date <= month_end:
+		if month_start <= posting_date <= month_end and start_date <= posting_date <= end_date:
 			month_si_total = month_si_total + i.amount
 
 	for i in pi_amount:
@@ -240,7 +239,7 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 		posting_date = pi_doc.posting_date
 		if start_date <= posting_date <= end_date:
 			pi_total = pi_total + i.amount
-		if month_start <= posting_date <= month_end:
+		if month_start <= posting_date <= month_end and start_date <= posting_date <= end_date:
 			month_pi_total = month_pi_total + i.amount
 
 
@@ -249,7 +248,7 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 		posting_date = ec_doc.posting_date
 		if start_date <= posting_date <= end_date:
 			ec_total = ec_total + i.amount
-		if month_start <= posting_date <= month_end:
+		if month_start <= posting_date <= month_end and start_date <= posting_date <= end_date:
 			month_ec_total = month_ec_total + i.amount
 
 	for i in je_amount:
@@ -259,7 +258,7 @@ def actual_amounts(project, head, start_date, end_date,month_start,month_end):
 			if i.debit_in_account_currency:
 				i["amount"] = i["debit_in_account_currency"]
 				je_total = je_total + i.amount
-			if month_start <= posting_date <= month_end:
+			if month_start <= posting_date <= month_end and start_date <= posting_date <= end_date:
 				i["amount"] = i["debit_in_account_currency"]
 				month_je_total = month_je_total + i.amount
 	return [si_total + pi_total + ec_total + je_total,month_si_total + month_pi_total + month_ec_total + month_je_total]
@@ -305,3 +304,4 @@ def get_month_names_and_Selected_Period_over_all_percenatage(monthly_distributio
 
 
 	return over_all_percenatage[0]['percentage_allocation'] if over_all_percenatage else 0
+

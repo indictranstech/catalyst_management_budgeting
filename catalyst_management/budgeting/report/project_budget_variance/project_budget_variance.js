@@ -3,23 +3,60 @@
 /* eslint-disable */
 
 frappe.query_reports["Project Budget Variance"] = {
-	"filters": [
-		{
-			"fieldname": "period",
-			"label": __("Accounting Period"),
-			"fieldtype": "Link",
-			"options": "Accounting Period",
-			"width": 100,
-			"reqd": 0,
-		},
-		{
-			"fieldname": "project",
-			"label": __("Project"),
-			"fieldtype": "Link",
-			"options": "Project",
-			"width": 100,
-			"reqd": 0,
-		},
+"filters": [
+    {
+        "fieldname": "project",
+        "label": __("Project"),
+        "fieldtype": "Link",
+        "options": "Project",
+        "width": 100,
+        "reqd": 0,
+        "on_change": function() {
+            var pr = frappe.query_report.get_filter_value("project");
+            if (pr) {
+                frappe.call({
+                    method: "frappe.client.get_value",
+                    args: {
+                        doctype: "Project",
+                        filters: { name: pr },
+                        fieldname: "company"
+                    },
+                    callback: function(response) {
+                        var company = response.message.company;
+                        frappe.query_report.set_filter_value("period", "");
+                        frappe.query_report.set_filter_value("period", "");
+                    }
+                });
+            } else {
+                frappe.query_report.set_filter_value("period", "");
+            }
+        }
+    },
+    {
+        "fieldname": "company",
+        "label": __("Company"),
+        "fieldtype": "Link",
+        "options": "Company",
+        "width": 100,
+        "reqd": 0,
+    },
+    {
+        "fieldname": "period",
+        "label": __("Accounting Period"),
+        "fieldtype": "Link",
+        "options": "Accounting Period",
+        "width": 100,
+        "reqd": 0,
+        "get_query": function() {
+            var pr = frappe.query_report.get_filter_value("company");
+            return {
+                    'doctype': 'Accounting Period',
+                    'filters': { 'company':pr},
+                    'limit_page_length': 10000
+                };
+        }
+        },
+	
 		{
 			"fieldname": "budget_account_head",
 			"label": __("Budget Account Head"),
