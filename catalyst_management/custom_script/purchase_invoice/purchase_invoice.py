@@ -17,16 +17,23 @@ def validate(doc, method):
         elif (doc. workflow_state == 'Approved'):
             doc.custom_approved_on = doc.modified
 
-    
+
 @frappe.whitelist()
 def update_chart_of_account(doc):
     doc = json.loads(doc)
     for d in doc.get('items'):
-        result = frappe.db.get_all('Budget Account Mapping', {'parent':d.get('project'),'budget_account_head':d.get('budget_account_head')}, ['chart_of_account_head'])
-        result_dict = {}
-        for d in result:
-            for key, value in d.items():
-                result_dict[key] = value
+        result = frappe.db.get_all('Budget Account Mapping', {'parent':d.get('project'),'budget_account_head':d.get('budget_account_head'), 'period':d.get('custom_period')}, ['chart_of_account_head'])
+        result1 = frappe.db.get_all('Budget Account Mapping', {'parent':d.get('project'),'budget_account_head':d.get('budget_account_head')}, ['chart_of_account_head'])
+        if d.get('custom_fiscal_year_wise__coa') == 1:
+            result_dict = {}
+            for d in result:
+                for key, value in d.items():
+                    result_dict[key] = value
+        elif d.get('custom_fiscal_year_wise__coa') == 0: 
+            result_dict = {}
+            for d in result1:
+                for key, value in d.items():
+                    result_dict[key] = value           
     return result_dict.get('chart_of_account_head')
 
       

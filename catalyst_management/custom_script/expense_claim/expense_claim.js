@@ -111,7 +111,22 @@ cur_frm.fields_dict["expenses"].grid.get_field("budget_account_head").get_query 
 // });
 
 frappe.ui.form.on('Expense Claim Detail', {
-    budget_account_head(frm) {
+    expense_type(frm, cdt, cdn) {
+	    frappe.db.get_value("Accounting Period", 
+                    {
+                        "start_date": ["<=", frm.doc.date],
+                        "end_date": [">=", frm.doc.date],
+                        "company": frm.doc.company,
+                    }, 
+                    "name", 
+                    (r) => {
+                        if (r && r.name) {
+                        frappe.model.set_value(cdt, cdn, 'custom_period',r.name);
+                        }
+                    }
+	)
+	},
+    budget_account_head(frm, cdt, cdn) {
         frappe.call({
             method: 'catalyst_management.custom_script.expense_claim.expense_claim.update_chart_of_account',
             args: {
@@ -122,7 +137,8 @@ frappe.ui.form.on('Expense Claim Detail', {
                     // Loop through each row in the child table
                     frm.doc.expenses.forEach(function(item) {
                         // Set the value of the expense_account field for each row
-                        frappe.model.set_value(item.doctype, item.name, 'default_account', r.message);
+                        // frappe.model.set_value(item.doctype, item.name, 'default_account', r.message);
+                        frappe.model.set_value(cdt, cdn, 'default_account', r.message);
                     });
 
                     refresh_field('expenses');
