@@ -134,15 +134,24 @@ frappe.ui.form.on('Expense Claim Detail', {
             },
             callback: function(r) {
                 if (r.message) {
+                    console.log("@@@@@@@@@@@@@@@@@@@@@",r.message)
                     // Loop through each row in the child table
                     frm.doc.expenses.forEach(function(item) {
                         // Set the value of the expense_account field for each row
                         // frappe.model.set_value(item.doctype, item.name, 'default_account', r.message);
                         frappe.model.set_value(cdt, cdn, 'default_account', r.message);
                     });
+                }
+                else {
+                    // If r.message is null or undefined
+                    frm.doc.expenses.forEach(function(item) {
+                        // Set the value of the custom_fiscal_year_wise__coa field for each row to 0
+                        frappe.model.set_value(cdt, cdn, 'custom_fiscal_year_wise__coa', 0);
+                    });
+                }
 
                     refresh_field('expenses');
-                }
+                
             }
         });
     }

@@ -35,7 +35,9 @@ def update_chart_of_account(doc):
             for d in result1:
                 for key, value in d.items():
                     result_dict[key] = value           
-    return result_dict.get('chart_of_account_head')    
+    return result_dict.get('chart_of_account_head') 
+
+    
 
 # Posting date validate according to contract end date 
 

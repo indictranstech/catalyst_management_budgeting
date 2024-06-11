@@ -85,9 +85,17 @@ frappe.ui.form.on('Sales Invoice Item', {
                         // frappe.model.set_value(item.doctype, item.name, 'income_account', r.message);
                         frappe.model.set_value(cdt, cdn, 'income_account', r.message);
                     });
+                }
+                else {
+                    // If r.message is null or undefined
+                    frm.doc.items.forEach(function(item) {
+                        // Set the value of the custom_fiscal_year_wise__coa field for each row to 0
+                        frappe.model.set_value(cdt, cdn, 'custom_fiscal_year_wise__coa', 0);
+                    });
+                }    
 
                     refresh_field('items');
-                }
+                
             }
         });
     }
