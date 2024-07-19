@@ -3,24 +3,54 @@ from frappe import _
 
 def execute(filters=None):
 	columns = get_columns(filters)
-	data = get_data(filters)
+	conditions = get_conditions(filters)
+	data = get_data(filters,conditions)
 	return columns, data, None
 
-# def get_conditions(filters):
-#     conditions = ""
-#     if(filters.get('document') == 'Sales Invoice'):
-# 	    if filters.get("from_date") and filters.get("to_date"):
-# 	        conditions += f" and si.posting_date between '{filters.get('from_date')}' and '{filters.get('to_date')}'"
-# 	    if filters.get("customer"):
-# 	    	conditions += f" and cu.name = '{filters.get('customer')}'"
+def get_conditions(filters):
+    conditions = ""
+    if(filters.get('document') == 'Purchase Invoice'):
+	    if filters.get("from_date") and filters.get("to_date"):
+	        conditions += f" and pi.posting_date between '{filters.get('from_date')}' and '{filters.get('to_date')}'"
+	    if filters.get("project"):
+	    	conditions += f" and pii.project_budget = '{filters.get('project')}'"
+	    if filters.get("budget_account_head"):
+	    	conditions += f" and pii.budget_account_head = '{filters.get('budget_account_head')}'"
     
-#     return conditions
+
+    if(filters.get('document') == 'Sales Invoice'):
+	    if filters.get("from_date") and filters.get("to_date"):
+	        conditions += f" and si.posting_date between '{filters.get('from_date')}' and '{filters.get('to_date')}'"
+	    if filters.get("project"):
+	    	conditions += f" and sii.project_budget = '{filters.get('project')}'"
+	    if filters.get("budget_account_head"):
+	    	conditions += f" and sii.budget_account_head = '{filters.get('budget_account_head')}'"
+    
+    if(filters.get('document') == 'Journal Entry'):
+	    if filters.get("from_date") and filters.get("to_date"):
+	        conditions += f" and je.posting_date between '{filters.get('from_date')}' and '{filters.get('to_date')}'"
+	    if filters.get("project"):
+	    	conditions += f" and jea.project_budget = '{filters.get('project')}'"
+	    if filters.get("budget_account_head"):
+	    	conditions += f" and jea.budget_account_head = '{filters.get('budget_account_head')}'"
+    
+    if(filters.get('document') == 'Expense Claim'):
+	    if filters.get("from_date") and filters.get("to_date"):
+	        conditions += f" and ec.posting_date between '{filters.get('from_date')}' and '{filters.get('to_date')}'"
+	    if filters.get("project"):
+	    	conditions += f" and ecd.project_budget = '{filters.get('project')}'"
+	    if filters.get("budget_account_head"):
+	    	conditions += f" and ecd.budget_account_head = '{filters.get('budget_account_head')}'"
+    
+
+    return conditions
 
 
-def get_data(filters):
+def get_data(filters,conditions):
 	print(f'\n filters == {filters}\n')
+	
 	if(filters.get('document') == 'Purchase Invoice'):
-		pi_data = frappe.db.sql(""" SELECT DISTINCT
+		pi_data = frappe.db.sql(f""" SELECT DISTINCT
 				pii.project_for_budget, pii.project_budget, pii.budget_account_head,
 				pi.grand_total as actual_amount,pii.expense_account as coa,
 				pii.amount, pii.modified, pii.parent as document_name, pii.parenttype as document, pii.docstatus,
@@ -29,15 +59,18 @@ def get_data(filters):
 			FROM `tabPurchase Invoice`pi 
 			LEFT JOIN `tabPurchase Invoice Item`pii 
 			ON pi.name = pii.parent 
-			WHERE pi.posting_date BETWEEN '{0}' and '{1}'  
-			AND  pii.project_budget = '{2}' AND pii.budget_account_head = '{3}'
+			WHERE pii.docstatus = 1 AND pii.project_for_budget IS NOT NULL AND 1=1 
+	     	{conditions} 
+                    
+             """,as_dict=1,debug=1)
 
-	 	""".format(filters.get('from_date'), filters.get('to_date'),filters.get('project'),filters.get('budget_account_head')),as_dict=1,debug=1)
+		for i in pi_data:
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head': i.budget_account_head}, 'parent_budget_account_head'))
 
 		return pi_data
 
-	if(filters.get('document') == 'Sales Invoice'):
-		si_data = frappe.db.sql(""" SELECT DISTINCT
+	elif(filters.get('document') == 'Sales Invoice'):
+		si_data = frappe.db.sql(f""" SELECT DISTINCT
 				sii.project_for_budget, sii.project_budget, sii.budget_account_head,
 				sii.amount, sii.modified, sii.parent as document_name,
 				sii.parenttype as document,sii.docstatus,si.grand_total as actual_amount,
@@ -46,14 +79,16 @@ def get_data(filters):
 			FROM `tabSales Invoice`si 
 			JOIN `tabSales Invoice Item`sii 
 			ON si.name = sii.parent 
-			WHERE sii.project_budget = '{0}' OR sii.budget_account_head = '{1}'
-
-	 	""".format(filters.get('project'),filters.get('budget_account_head')),as_dict=1,debug=1)
-
+			WHERE sii.docstatus = 1 AND sii.project_for_budget IS NOT NULL AND 1=1 
+	     	{conditions} 
+                    
+             """,as_dict=1,debug=1)
+		for i in si_data:
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head': i.budget_account_head}, 'parent_budget_account_head'))
 		return si_data
 
-	if(filters.get('document') == 'Journal Entry'):
-		je_data = frappe.db.sql(""" SELECT DISTINCT
+	elif(filters.get('document') == 'Journal Entry'):
+		je_data = frappe.db.sql(f""" SELECT DISTINCT
 				jea.project_for_budget, jea.project_budget, jea.budget_account_head,
 				jea.debit_in_account_currency AS actual_amount, jea.modified, jea.name,
 				jea.parent as document_name,
@@ -62,14 +97,18 @@ def get_data(filters):
 			FROM `tabJournal Entry`je 
 			JOIN `tabJournal Entry Account`jea 
 			ON je.name = jea.parent 
-			WHERE jea.project_budget = '{0}' AND jea.budget_account_head = '{1}'
-
-	 	""".format(filters.get('project'),filters.get('budget_account_head')),as_dict=1,debug=1)
-
+			WHERE jea.docstatus = 1 AND jea.project_for_budget IS NOT NULL AND
+			1=1 
+	     	{conditions} 
+                    
+             """,as_dict=1,debug=1)
+		for i in je_data:
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head': i.budget_account_head}, 'parent_budget_account_head'))
+			
 		return je_data
 
-	if(filters.get('document') == 'Expense Claim'):
-		ec_data = frappe.db.sql(""" SELECT DISTINCT
+	elif(filters.get('document') == 'Expense Claim'):
+		ec_data = frappe.db.sql(f""" SELECT DISTINCT
 				ecd.project_for_budget, ecd.project_budget, ecd.budget_account_head,
 				ecd.amount, ecd.modified, ecd.name, ecd.parent as document_name,
 				ecd.parenttype as document, ecd.docstatus,ecd.sanctioned_amount as actual_amount,
@@ -78,71 +117,81 @@ def get_data(filters):
 			FROM `tabExpense Claim`ec 
 			JOIN `tabExpense Claim Detail`ecd 
 			ON ec.name = ecd.parent 
-			WHERE ecd.project_budget = '{0}'OR ecd.budget_account_head = '{1}'
-
-	 	""".format(filters.get('project'),filters.get('budget_account_head')),as_dict=1,debug=1)
-
+			WHERE ecd.docstatus = 1 AND ecd.project_for_budget IS NOT NULL AND 1=1 
+	     	{conditions} 
+                    
+             """,as_dict=1,debug=1)
+		for i in ec_data:
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head': i.budget_account_head}, 'parent_budget_account_head'))
 		return ec_data
+
 	else:
 		project = filters.get('project')
 		budget_account_head = filters.get('budget_account_head')
 		# doc_list = ["Journal Entry", "Purchase Invoice", "Expense Claim", "Sales Invoice"]
-		data = frappe.db.sql ("""SELECT 
-			    'Journal Entry' AS document_type,
-			    je.name AS document_name,
-			    je.posting_date,
-			    jea.debit_in_account_currency AS actual_amount,
-			    jea.project_budget,
-			    jea.budget_account_head
-			FROM `tabJournal Entry` AS je
-			JOIN `tabJournal Entry Account`jea 
-			ON je.name = jea.parent
-			WHERE jea.project_budget = '{0}' AND jea.budget_account_head = '{1}'
-
-			UNION ALL
-
-			SELECT 
-			    'Purchase Invoice' AS document_type,
-			    pi.name AS document_name,
-			    pi.posting_date,
-			    pi.grand_total as actual_amount,
-			    pii.project_budget,
-			    pii.budget_account_head
-			FROM `tabPurchase Invoice` AS pi
+		data = frappe.db.sql (f"""SELECT DISTINCT
+				pii.project_for_budget, pii.project_budget, pii.budget_account_head,
+				pi.grand_total as actual_amount,pii.expense_account as coa,
+				pii.amount, pii.modified, pii.parent as document_name, pii.parenttype as document, pii.docstatus,
+				pii.expense_account AS coa_from_transaction, pii.cost_center, pi.posting_date,
+				"Supplier" AS party_type, pi.supplier AS party
+			FROM `tabPurchase Invoice`pi 
 			LEFT JOIN `tabPurchase Invoice Item`pii 
-			ON pi.name = pii.parent
-			WHERE pii.project_budget = '{0}' AND pii.budget_account_head = '{1}'
+			ON pi.name = pii.parent 
+			WHERE 1=1 
+	     	{conditions} 
 
 			UNION ALL
 
-			SELECT 
-			    'Expense Claim' AS document_type,
-			    ec.name AS document_name,
-			    ec.posting_date AS posting_date,
-			    ecd.sanctioned_amount as actual_amount,
-			    ecd.project_budget,
-			    ecd.budget_account_head
-			FROM `tabExpense Claim` AS ec
-			JOIN `tabExpense Claim Detail`ecd 
-			ON ec.name = ecd.parent 
-			WHERE ecd.project_budget = '{0}' AND ecd.budget_account_head = '{1}'
+			SELECT DISTINCT
+				sii.project_for_budget,sii.project_budget,
+				sii.budget_account_head, sii.amount as actual_amount,
+				sii.income_account as coa, sii.amount,sii.modified,
+				sii.parent as document_name, sii.parenttype as document,
+				sii.docstatus, sii.income_account AS coa_from_transaction,
+				sii.cost_center, si.posting_date, "Customer" AS party_type,
+				si.customer AS party  
+				FROM `tabSales Invoice`si  
+				JOIN `tabSales Invoice Item`sii  
+				ON si.name = sii.parent 
+				WHERE sii.docstatus = 1 AND sii.project_for_budget IS NOT NULL AND  1=1 
+	     	{conditions} 
 
 			UNION ALL
 
-			SELECT 
-			    'Sales Invoice' AS document_type,
-			    si.name AS document_name,
-			    si.posting_date,
-			    si.grand_total AS actual_amount,
-			    sii.project_budget,
-			    sii.budget_account_head
-			FROM `tabSales Invoice` AS si
-			JOIN `tabSales Invoice Item`sii 
-			ON si.name = sii.parent
-			WHERE sii.project_budget = '{0}' AND sii.budget_account_head = '{1}'
+			SELECT DISTINCT 
+				jea.project_for_budget,jea.project_budget,jea.budget_account_head,
+				jea.debit_in_account_currency as actual_amount,jea.account as coa,
+				jea.debit_in_account_currency,jea.modified,jea.parent as document_name,
+				jea.parenttype as document,jea.docstatus,
+				jea.account AS coa_from_transaction, jea.cost_center,
+				je.posting_date, jea.party_type AS party_type, jea.party AS party 
+			FROM `tabJournal Entry`je  
+			JOIN `tabJournal Entry Account`jea  
+			ON je.name = jea.parent 
+			WHERE jea.docstatus = 1 AND jea.project_for_budget IS NOT NULL AND 1=1 
+	     	{conditions} 
 
-		 	""".format(filters.get('project'),filters.get('budget_account_head')),as_dict=1,debug=1)
+			UNION ALL
+
+			SELECT DISTINCT 
+				ecd.project_for_budget, ecd.project_budget, ecd.budget_account_head,
+				ec.grand_total as actual_amount,ecd.default_account as coa,ecd.amount,
+				ecd.modified, ecd.parent as document_name, ecd.parenttype as document,
+				ecd.docstatus, ecd.default_account AS coa_from_transaction,ecd.cost_center,
+				ec.posting_date, "Employee" AS party_type, ec.employee_name AS party
+				FROM `tabExpense Claim`ec 
+				JOIN `tabExpense Claim Detail`ecd  
+				ON ec.name = ecd.parent
+			WHERE 1=1 
+	     	{conditions} 
+
+		 	""",as_dict=1,debug=1)
+		for i in data:
+			i.pbah = str(frappe.db.get_value('Budget Account Mapping', {'parent': i.project_budget,'budget_account_head': i.budget_account_head}, 'parent_budget_account_head'))
+
 		return  data
+		
 
 
 
@@ -308,3 +357,5 @@ def get_columns(filters):
 # 		data.update(si_data)
 # 		data.update(je_data)
 # 		data.update(ec_data)
+
+# 		return  data
