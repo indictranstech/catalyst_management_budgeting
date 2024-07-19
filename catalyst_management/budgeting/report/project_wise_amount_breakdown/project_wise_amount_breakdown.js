@@ -18,7 +18,7 @@ frappe.query_reports["Project Wise Amount Breakdown"] = {
 			"fieldtype": "Link",
 			"options": "Project",
 			"width": 100,
-			"reqd": 1,
+			"reqd": 0,
 		},
 		{
 			"fieldname": "budget_account_head",
@@ -26,7 +26,7 @@ frappe.query_reports["Project Wise Amount Breakdown"] = {
 			"fieldtype": "Link",
 			"options": "Budget Account Head",
 			"width": 100,
-			"reqd": 1,
+			"reqd": 0,
 		},
 		{
 			"fieldname": "from_date",
