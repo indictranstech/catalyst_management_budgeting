@@ -9,12 +9,12 @@
  "filters": [],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2023-03-17 13:03:09.651475",
+ "modified": "2024-08-07 12:09:20.706926",
  "modified_by": "Administrator",
  "module": "Budgeting",
  "name": "Project Amounts Breakdown",
  "owner": "Administrator",
- "prepared_report": 0,
+ "prepared_report": 1,
  "ref_doctype": "Project Budgeting",
  "reference_report": "",
  "report_name": "Project Amounts Breakdown",
@@ -22,6 +22,15 @@
  "roles": [
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Accounts Manager"
+  },
+  {
+   "role": "Projects Manager"
   }
  ]
 }
